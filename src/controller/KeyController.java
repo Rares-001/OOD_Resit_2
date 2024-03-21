@@ -15,31 +15,31 @@ import java.awt.event.KeyAdapter;
  * @version 1.6 2014/05/16 Sylvia Stuurman
 */
 
+/**
+ * KeyController manages keyboard input to control the Presentation model.
+ */
 public class KeyController extends KeyAdapter {
-	private Presentation presentation; //Commands are given to the presentation
+	private Presentation presentation;
 
-	public KeyController(Presentation p) {
-		presentation = p;
+	public KeyController(Presentation presentation) {
+		this.presentation = presentation;
 	}
 
-	public void keyPressed(KeyEvent keyEvent) {
-		switch(keyEvent.getKeyCode()) {
-			case KeyEvent.VK_PAGE_DOWN:
+	@Override
+	public void keyPressed(KeyEvent e) {
+		switch (e.getKeyCode()) {
+			case KeyEvent.VK_RIGHT:
 			case KeyEvent.VK_DOWN:
-			case KeyEvent.VK_ENTER:
-			case '+':
+			case KeyEvent.VK_PAGE_DOWN:
 				presentation.nextSlide();
 				break;
-			case KeyEvent.VK_PAGE_UP:
+			case KeyEvent.VK_LEFT:
 			case KeyEvent.VK_UP:
-			case '-':
+			case KeyEvent.VK_PAGE_UP:
 				presentation.prevSlide();
 				break;
-			case 'q':
-			case 'Q':
+			case KeyEvent.VK_ESCAPE:
 				System.exit(0);
-				break; //Should not be reached
-			default:
 				break;
 		}
 	}

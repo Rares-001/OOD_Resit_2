@@ -23,56 +23,40 @@ import javax.swing.JFrame;
  */
 
 public class SlideViewerComponent extends JComponent {
-		
-	private Slide slide; //The current slide
-	private Font labelFont = null; //The font for labels
-	private Presentation presentation = null; //The presentation
-	private JFrame frame = null;
-	
-	private static final long serialVersionUID = 227L;
-	
-	private static final Color BGCOLOR = Color.white;
-	private static final Color COLOR = Color.black;
-	private static final String FONTNAME = "Dialog";
-	private static final int FONTSTYLE = Font.BOLD;
-	private static final int FONTHEIGHT = 10;
-	private static final int XPOS = 1100;
-	private static final int YPOS = 20;
+	private Presentation presentation;
 
-	public SlideViewerComponent(Presentation pres, JFrame frame) {
-		setBackground(BGCOLOR); 
-		presentation = pres;
-		labelFont = new Font(FONTNAME, FONTSTYLE, FONTHEIGHT);
-		this.frame = frame;
+	public SlideViewerComponent(Presentation presentation) {
+		this.presentation = presentation;
+		setBackground(Color.white);
 	}
 
+	@Override
 	public Dimension getPreferredSize() {
 		return new Dimension(Slide.WIDTH, Slide.HEIGHT);
 	}
 
-	public void update(Presentation presentation, Slide data) {
-		if (data == null) {
-			repaint();
-			return;
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		Slide currentSlide = presentation.getCurrentSlide();
+		if (currentSlide != null) {
+			drawSlide(g, currentSlide);
 		}
-		this.presentation = presentation;
-		this.slide = data;
-		repaint();
-		frame.setTitle(presentation.getTitle());
 	}
 
-//Draw the slide
-	public void paintComponent(Graphics g) {
-		g.setColor(BGCOLOR);
-		g.fillRect(0, 0, getSize().width, getSize().height);
-		if (presentation.getSlideNumber() < 0 || slide == null) {
-			return;
-		}
-		g.setFont(labelFont);
-		g.setColor(COLOR);
-		g.drawString("model.Slide " + (1 + presentation.getSlideNumber()) + " of " +
-                 presentation.getSize(), XPOS, YPOS);
-		Rectangle area = new Rectangle(0, YPOS, getWidth(), (getHeight() - YPOS));
-		slide.draw(g, area, this);
+	/**
+	 * Draws the current slide, including all its items.
+	 *
+	 * @param g Graphics context
+	 * @param slide The slide to draw
+	 */
+	private void drawSlide(Graphics g, Slide slide) {
+		// Background
+		g.setColor(getBackground());
+		g.fillRect(0, 0, getWidth(), getHeight());
+
+		// Set up for drawing slide items
+		Rectangle area = new Rectangle(0, 0, getWidth(), getHeight());
+		slide.draw(g, area, this); // Delegate drawing to the Slide, which knows how to draw itself and its items
 	}
 }

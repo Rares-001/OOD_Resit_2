@@ -15,13 +15,11 @@ import java.util.ArrayList;
  * @version 1.6 2014/05/16 Sylvia Stuurman
  */
 
-package model;
-
-import java.util.ArrayList;
 
 /**
  * Manages the slides and the current state of the presentation.
  */
+
 public class Presentation {
 	private String title;
 	private ArrayList<Slide> slides;
@@ -50,10 +48,10 @@ public class Presentation {
 		if (index >= 0 && index < slides.size()) {
 			return slides.get(index);
 		}
-		return null; // Return null if the index is out of bounds
+		return null; // Return null if the index is out of boundss
 	}
 
-	// Returns the number of slides in the presentation
+	// returns the number of slides in the presentation
 	public int getSize() {
 		return slides.size();
 	}
