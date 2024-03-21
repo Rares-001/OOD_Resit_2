@@ -1,11 +1,13 @@
 package view;
 
-import model.Presentation;
-
-import java.awt.Dimension;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowAdapter;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+
+import controller.KeyController;
+import model.Presentation;
+import controller.MenuController;
 
 /**
  * <p>The applicatiewindow for a slideviewcomponent</p>
@@ -19,32 +21,49 @@ import javax.swing.JFrame;
 */
 
 public class SlideViewerFrame extends JFrame {
-	private static final long serialVersionUID = 3227L;
-	
-	private static final String JABTITLE = "Jabberpoint 1.6 - OU";
-	public final static int WIDTH = 1200;
-	public final static int HEIGHT = 800;
-	
+	private Presentation presentation;
+	private SlideViewerComponent slideViewerComponent;
+
 	public SlideViewerFrame(String title, Presentation presentation) {
 		super(title);
-		SlideViewerComponent slideViewerComponent = new SlideViewerComponent(presentation, this);
-		presentation.setShowView(slideViewerComponent);
-		setupWindow(slideViewerComponent, presentation);
+		this.presentation = presentation;
+
+		// JFrame setup
+		setSize(800, 600);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		// Initialize SlideViewerComponent
+		slideViewerComponent = new SlideViewerComponent(presentation);
+		add(slideViewerComponent);
+
+
+		slideViewerComponent.setFocusable(true);
+		slideViewerComponent.requestFocusInWindow();
+
+
+		// Setup menu
+		setupMenu();
+
+		// Create and register the KeyController with the slideViewerComponent
+		KeyController keyController = new KeyController(presentation);
+		slideViewerComponent.addKeyListener(keyController); // Register KeyController
+
+		setVisible(true);
+
 	}
 
-//Setup the GUI
-	public void setupWindow(SlideViewerComponent 
-			slideViewerComponent, Presentation presentation) {
-		setTitle(JABTITLE);
-		addWindowListener(new WindowAdapter() {
-				public void windowClosing(WindowEvent e) {
-					System.exit(0);
-				}
-			});
-		getContentPane().add(slideViewerComponent);
-		addKeyListener(new KeyController(presentation)); //Add a controller
-		setMenuBar(new MenuController(this, presentation));	//Add another controller
-		setSize(new Dimension(WIDTH, HEIGHT)); //Same sizes a slide has
-		setVisible(true);
+	private void setupMenu() {
+		JMenuBar menuBar = new JMenuBar();
+		JMenu menu = new JMenu("File");
+		JMenuItem next = new JMenuItem("Next");
+		next.addActionListener(e -> presentation.nextSlide());
+		menu.add(next);
+
+		JMenuItem prev = new JMenuItem("Previous");
+		prev.addActionListener(e -> presentation.prevSlide());
+		menu.add(prev);
+
+		menuBar.add(menu);
+		setJMenuBar(menuBar);
 	}
 }

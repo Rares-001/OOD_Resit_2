@@ -1,56 +1,71 @@
 package model;
 
-/** A built-in demo presentation
- * @author Ian F. Darwin, ian@darwinsys.com, Gert Florijn, Sylvia Stuurman
- * @version 1.1 2002/12/17 Gert Florijn
- * @version 1.2 2003/11/19 Sylvia Stuurman
- * @version 1.3 2004/08/17 Sylvia Stuurman
- * @version 1.4 2007/07/16 Sylvia Stuurman
- * @version 1.5 2010/03/03 Sylvia Stuurman
- * @version 1.6 2014/05/16 Sylvia Stuurman
+/**
+ * A built-in demo presentation that can be loaded without an external file.
  */
 
-class DemoPresentation extends Accessor {
+public class DemoPresentation extends Accessor {
 
+	/**
+	 * Loads a demo presentation with predefined slides and items into the given Presentation object.
+	 *
+	 * @param presentation The presentation object to load data into.
+	 * @param unusedFilename A placeholder parameter to maintain consistency with the Accessor interface. Not used.
+	 */
+
+	@Override
 	public void loadFile(Presentation presentation, String unusedFilename) {
-		presentation.setTitle("Demo model.Presentation");
-		Slide slide;
-		slide = new Slide();
-		slide.setTitle("JabberPoint");
-		slide.append(1, "The Java prestentation tool");
-		slide.append(2, "Copyright (c) 1996-2000: Ian Darwin");
-		slide.append(2, "Copyright (c) 2000-now:");
-		slide.append(2, "Gert Florijn and Sylvia Stuurman");
-		slide.append(4, "Calling Jabberpoint without a filename");
-		slide.append(4, "will show this presentation");
-		slide.append(1, "Navigate:");
-		slide.append(3, "Next slide: PgDn or Enter");
-		slide.append(3, "Previous slide: PgUp or up-arrow");
-		slide.append(3, "Quit: q or Q");
-		presentation.append(slide);
+		// Set the title of the presentation
+		presentation.setTitle("Demo Presentation");
 
-		slide = new Slide();
-		slide.setTitle("Demonstration of levels and styles");
-		slide.append(1, "Level 1");
-		slide.append(2, "Level 2");
-		slide.append(1, "Again level 1");
-		slide.append(1, "Level 1 has style number 1");
-		slide.append(2, "Level 2 has style number 2");
-		slide.append(3, "This is how level 3 looks like");
-		slide.append(4, "And this is level 4");
-		presentation.append(slide);
+		// Adding the first slide
+		Slide slide1 = new Slide();
+		slide1.setTitle("JabberPoint");
+		slide1.append(new TextItem(1, "The Java presentation tool"));
+		slide1.append(new TextItem(2, "Copyright (c) 1996-2000: Ian Darwin"));
+		slide1.append(new TextItem(2, "Copyright (c) 2000-now:"));
+		slide1.append(new TextItem(2, "Gert Florijn and Sylvia Stuurman"));
+		slide1.append(new TextItem(4, "Calling Jabberpoint without a filename"));
+		slide1.append(new TextItem(4, "will show this presentation"));
+		slide1.append(new TextItem(1, "Navigate:"));
+		slide1.append(new TextItem(3, "Next slide: PgDn or Enter"));
+		slide1.append(new TextItem(3, "Previous slide: PgUp or up-arrow"));
+		slide1.append(new TextItem(3, "Quit: q or Q"));
+		presentation.append(slide1);
 
-		slide = new Slide();
-		slide.setTitle("The third slide");
-		slide.append(1, "To open a new presentation,");
-		slide.append(2, "use File->Open from the menu.");
-		slide.append(1, " ");
-		slide.append(1, "This is the end of the presentation.");
-		slide.append(new BitmapItem(1, "JabberPoint.jpg"));
-		presentation.append(slide);
+		// Adding the second slide
+		Slide slide2 = new Slide();
+		slide2.setTitle("Demonstration of levels and styles");
+		slide2.append(new TextItem(1, "Level 1"));
+		slide2.append(new TextItem(2, "Level 2"));
+		slide2.append(new TextItem(1, "Again level 1"));
+		slide2.append(new TextItem(1, "Level 1 has style number 1"));
+		slide2.append(new TextItem(2, "Level 2 has style number 2"));
+		slide2.append(new TextItem(3, "This is how level 3 looks like"));
+		slide2.append(new TextItem(4, "And this is level 4"));
+		presentation.append(slide2);
+
+		// Adding the third slide
+		Slide slide3 = new Slide();
+		slide3.setTitle("The third slide");
+		slide3.append(new TextItem(1, "To open a new presentation,"));
+		slide3.append(new TextItem(2, "use File->Open from the menu."));
+		slide3.append(new TextItem(1, " "));
+		slide3.append(new TextItem(1, "This is the end of the presentation."));
+
+		// Assuming BitmapItem constructor takes (level, imagePath)
+		slide3.append(new BitmapItem(1, "JabberPoint.jpg"));
+		presentation.append(slide3);
 	}
 
+	/**
+	 * Throws UnsupportedOperationException if an attempt is made to save the demo presentation.
+	 *
+	 * @param presentation The presentation object that would hypothetically be saved.
+	 * @param unusedFilename The filename under which the presentation would hypothetically be saved.
+	 */
+	@Override
 	public void saveFile(Presentation presentation, String unusedFilename) {
-		throw new IllegalStateException("Save As->Demo! called");
+		throw new UnsupportedOperationException("Saving a demo presentation is not supported.");
 	}
 }

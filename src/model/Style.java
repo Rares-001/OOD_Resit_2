@@ -17,44 +17,59 @@ import java.awt.Font;
  */
 
 public class Style {
-	private static Style[] styles; // de styles
-	
-	private static final String FONTNAME = "Helvetica";
-	int indent;
-	Color color;
-	Font font;
-	int fontSize;
-	int leading;
+	private static Style[] styles;
 
+	private static final String FONT_NAME = "Helvetica";
+	private int indent;
+	private Color color;
+	private Font font;
+	private int fontSize;
+	private int leading;
+
+	// Initialize default styles
 	public static void createStyles() {
-		styles = new Style[5];    
-		// De styles zijn vast ingecodeerd.
-		styles[0] = new Style(0, Color.red,   48, 20);	// style voor item-level 0
-		styles[1] = new Style(20, Color.blue,  40, 10);	// style voor item-level 1
-		styles[2] = new Style(50, Color.black, 36, 10);	// style voor item-level 2
-		styles[3] = new Style(70, Color.black, 30, 10);	// style voor item-level 3
-		styles[4] = new Style(90, Color.black, 24, 10);	// style voor item-level 4
+		styles = new Style[] {
+				new Style(0, Color.red, 48, 20),
+				new Style(20, Color.blue, 40, 10),
+				new Style(50, Color.black, 36, 10),
+				new Style(70, Color.black, 30, 10),
+				new Style(90, Color.black, 24, 10)
+		};
 	}
 
+	// Retrieve style by level
 	public static Style getStyle(int level) {
-		if (level >= styles.length) {
-			level = styles.length - 1;
+		if (level < styles.length) {
+			return styles[level];
 		}
-		return styles[level];
+		return styles[styles.length - 1];
 	}
 
-	public Style(int indent, Color color, int points, int leading) {
+	private Style(int indent, Color color, int fontSize, int leading) {
 		this.indent = indent;
 		this.color = color;
-		font = new Font(FONTNAME, Font.BOLD, fontSize=points);
+		this.fontSize = fontSize; // Ensure fontSize is set before creating the font
+		this.font = new Font(FONT_NAME, Font.BOLD, this.fontSize);
 		this.leading = leading;
 	}
 
-	public String toString() {
-		return "["+ indent + "," + color + "; " + fontSize + " on " + leading +"]";
+	public int getIndent() {
+		return indent;
 	}
 
-	public Font getFont(float scale) {
-		return font.deriveFont(fontSize * scale);
+	public Color getColor() {
+		return color;
+	}
+
+	public Font getFont() {
+		return font;
+	}
+
+	public int getFontSize() {
+		return fontSize;
+	}
+
+	public int getLeading() {
+		return leading;
 	}
 }

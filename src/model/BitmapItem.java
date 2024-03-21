@@ -1,74 +1,76 @@
 package model;
 
-import java.awt.Rectangle;
+import javax.imageio.ImageIO;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
-
-import javax.imageio.ImageIO;
-
 import java.io.IOException;
 
-
-/** <p>The class for a Bitmap item</p>
- * <p>Bitmap items are responsible for drawing themselves.</p>
- * @author Ian F. Darwin, ian@darwinsys.com, Gert Florijn, Sylvia Stuurman
- * @version 1.1 2002/12/17 Gert Florijn
- * @version 1.2 2003/11/19 Sylvia Stuurman
- * @version 1.3 2004/08/17 Sylvia Stuurman
- * @version 1.4 2007/07/16 Sylvia Stuurman
- * @version 1.5 2010/03/03 Sylvia Stuurman
- * @version 1.6 2014/05/16 Sylvia Stuurman
-*/
-
+/**
+ * A slide item for representing bitmap images.
+ */
 public class BitmapItem extends SlideItem {
-  private BufferedImage bufferedImage;
-  private String imageName;
-  
-  protected static final String FILE = "File ";
-  protected static final String NOTFOUND = " not found";
+	private String imagePath;
+	private BufferedImage image;
 
+	/**
+	 * Constructs a new BitmapItem with a specified level and image path
+	 *
+	 * @param level The level (indentation) of the item.
+	 * @param imagePath The file path to the image.
+	 */
 
-  	//level indicates the item-level; name indicates the name of the file with the image
-	public BitmapItem(int level, String name) {
+	public BitmapItem(int level, String imagePath) {
 		super(level);
-		imageName = name;
+		this.imagePath = imagePath;
+		loadImage();
+	}
+
+	/**
+	 * Loads the image from the specified imagePath.
+	 */
+
+	private void loadImage() {
 		try {
-			bufferedImage = ImageIO.read(new File(imageName));
+			this.image = ImageIO.read(new File(imagePath));
+		} catch (IOException e) {
+			System.err.println("Error loading image: " + imagePath);
+			this.image = null;
 		}
-		catch (IOException e) {
-			System.err.println(FILE + imageName + NOTFOUND) ;
+	}
+
+	/**
+	 * Draws the image onto the specified Graphics context.
+	 *
+	 * @param g The Graphics context to draw on.
+	 * @param x The x coordinate of the upper-left corner where the image should be drawn.
+	 * @param y The y coordinate of the upper-left corner where the image should be drawn.
+	 * @param observer An object to be notified as more of the image is available.
+	 */
+
+	@Override
+	public void draw(Graphics g, int x, int y, ImageObserver observer) {
+		if (image != null) {
+			g.drawImage(image, x, y, observer);
+		} else {
+			g.drawString("Image not found", x, y + 15); // show text if the image fails to load
 		}
 	}
 
-	//An empty bitmap item
-	public BitmapItem() {
-		this(0, null);
-	}
+	/**
+	 * Calculates the height of the image.
+	 *
+	 * @param g The Graphics context used for drawing (not used in this method but required by the abstract class).
+	 * @param observer An object to be notified as more of the image is available (not used in this method but required by the abstract method signature).
+	 * @return The height of the image, or a default value if the image is not loaded.
+	 */
 
-	//Returns the filename of the image
-	public String getName() {
-		return imageName;
-	}
-
-	//Returns the bounding box of the image
-	public Rectangle getBoundingBox(Graphics g, ImageObserver observer, float scale, Style myStyle) {
-		return new Rectangle((int) (myStyle.indent * scale), 0,
-				(int) (bufferedImage.getWidth(observer) * scale),
-				((int) (myStyle.leading * scale)) + 
-				(int) (bufferedImage.getHeight(observer) * scale));
-	}
-
-	//Draws the image
-	public void draw(int x, int y, float scale, Graphics g, Style myStyle, ImageObserver observer) {
-		int width = x + (int) (myStyle.indent * scale);
-		int height = y + (int) (myStyle.leading * scale);
-		g.drawImage(bufferedImage, width, height,(int) (bufferedImage.getWidth(observer)*scale),
-                (int) (bufferedImage.getHeight(observer)*scale), observer);
-	}
-
-	public String toString() {
-		return "model.BitmapItem[" + getLevel() + "," + imageName + "]";
+	@Override
+	public int getHeight(Graphics g, ImageObserver observer) {
+		if (image != null) {
+			return image.getHeight();
+		}
+		return 30; // Default height for the fallback text.
 	}
 }

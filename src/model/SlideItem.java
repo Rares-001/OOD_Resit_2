@@ -15,27 +15,25 @@ import java.awt.image.ImageObserver;
  * @version 1.6 2014/05/16 Sylvia Stuurman
 */
 
+/**
+ * The abstract class for items on a slide. All SlideItems have drawing capabilities.
+ */
+
 public abstract class SlideItem {
-	private int level = 0; //The level of the model.SlideItem
+	private int level;
 
-	public SlideItem(int lev) {
-		level = lev;
+	public SlideItem(int level) {
+		this.level = level;
 	}
 
-	public SlideItem() {
-		this(0);
-	}
-
-//Returns the level
 	public int getLevel() {
 		return level;
 	}
 
-//Returns the bounding box
-	public abstract Rectangle getBoundingBox(Graphics g, 
-			ImageObserver observer, float scale, Style style);
+	// The draw method doesn't need to notify observers since it's
+	// about rendering, not changing the state.
+	public abstract void draw(Graphics g, int x, int y, ImageObserver observer);
 
-//Draws the item
-	public abstract void draw(int x, int y, float scale, 
-			Graphics g, Style style, ImageObserver observer);
+	// Similarly, getHeight is about rendering, not state change.
+	public abstract int getHeight(Graphics g, ImageObserver observer);
 }

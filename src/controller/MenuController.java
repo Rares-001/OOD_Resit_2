@@ -1,39 +1,33 @@
 package controller;
 
-import model.Accessor;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JOptionPane;
 import model.Presentation;
 import model.XMLAccessor;
-import view.AboutBox;
 
-import java.awt.MenuBar;
-import java.awt.Frame;
-import java.awt.Menu;
-import java.awt.MenuItem;
-import java.awt.MenuShortcut;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.io.IOException;
-
-import javax.swing.JOptionPane;
-
-/** <p>The controller for the menu</p>
- * @author Ian F. Darwin, ian@darwinsys.com, Gert Florijn, Sylvia Stuurman
- * @version 1.1 2002/12/17 Gert Florijn
- * @version 1.2 2003/11/19 Sylvia Stuurman
- * @version 1.3 2004/08/17 Sylvia Stuurman
- * @version 1.4 2007/07/16 Sylvia Stuurman
- * @version 1.5 2010/03/03 Sylvia Stuurman
- * @version 1.6 2014/05/16 Sylvia Stuurman
- */
 /**
- * MenuController handles actions triggered from the menu, updating the Presentation model accordingly.
+ * Handles menu actions for the JabberPoint application.
  */
+
 public class MenuController implements ActionListener {
 	private Presentation presentation;
+
+	/**
+	 * Constructs a MenuController for the specified presentation.
+	 *
+	 * @param presentation The presentation to be manipulated by menu actions.
+	 */
 
 	public MenuController(Presentation presentation) {
 		this.presentation = presentation;
 	}
+
+	/**
+	 * Responds to menu item actions
+	 *
+	 * @param e The action event triggered by selecting a menu item.
+	 */
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -47,15 +41,31 @@ public class MenuController implements ActionListener {
 				presentation.prevSlide();
 				break;
 			case "Open":
-				openPresentation(); // This method would handle opening a new presentation
+				openPresentation();
 				break;
 			case "Exit":
 				System.exit(0);
 				break;
+			default:
+				JOptionPane.showMessageDialog(null, "Unrecognized menu command: " + command, "Error", JOptionPane.ERROR_MESSAGE);
+				break;
 		}
 	}
 
+	/**
+	 * Handles opening a new presentation file.
+	 */
+
 	private void openPresentation() {
-		// this implementation is empty
+		String filePath = JOptionPane.showInputDialog(null, "Enter the path of the presentation file:");
+
+		if (filePath != null && !filePath.trim().isEmpty()) {
+			try {
+				new XMLAccessor().loadFile(presentation, filePath);
+				presentation.setSlideNumber(0); // Start at the beginning of the new presentation
+			} catch (Exception ex) {
+				JOptionPane.showMessageDialog(null, "Failed to load presentation from: " + filePath, "Error", JOptionPane.ERROR_MESSAGE);
+			}
+		}
 	}
 }

@@ -1,11 +1,10 @@
-import model.Accessor;
+import model.DemoPresentation;
 import model.Presentation;
 import model.Style;
 import model.XMLAccessor;
 import view.SlideViewerFrame;
 
 import javax.swing.JOptionPane;
-
 import java.io.IOException;
 
 /** JabberPoint Main Program
@@ -23,27 +22,51 @@ import java.io.IOException;
  */
 
 public class JabberPoint {
-	protected static final String IOERR = "IO Error: ";
-	protected static final String JABERR = "Jabberpoint Error ";
-	protected static final String JABVERSION = "Jabberpoint 1.6 - OU version";
+	protected static final String IO_ERROR_MESSAGE = "IO Error: ";
+	protected static final String JABBERPOINT_ERROR = "JabberPoint Error ";
+	protected static final String JABBERPOINT_VERSION = "JabberPoint 1.6 - OU version";
 
-	/** The main program */
-	public static void main(String[] argv) {
-		
+	/**
+	 * The main program entry point.
+	 */
+
+	public static void main(String[] args) {
+		// Initialize styles for the presentation
 		Style.createStyles();
+
+		// Create a new presentation
 		Presentation presentation = new Presentation();
-		new SlideViewerFrame(JABVERSION, presentation);
+
+		// Initialize the main application window
+		SlideViewerFrame viewerFrame = new SlideViewerFrame(JABBERPOINT_VERSION, presentation);
+
 		try {
-			if (argv.length == 0) { //a demo presentation
-				Accessor.getDemoAccessor().loadFile(presentation, "");
-			} else {
-				new XMLAccessor().loadFile(presentation, argv[0]);
-			}
+			// Load a demo or XML presentation based on the command-line argument
+			loadPresentation(presentation, args);
+
+			// Set the initial slide number
 			presentation.setSlideNumber(0);
-		} catch (IOException ex) {
-			JOptionPane.showMessageDialog(null,
-					IOERR + ex, JABERR,
-					JOptionPane.ERROR_MESSAGE);
+		} catch (Exception e) {
+			// Show an error message dialog in case of failure
+			JOptionPane.showMessageDialog(viewerFrame, IO_ERROR_MESSAGE + e.getMessage(), JABBERPOINT_ERROR, JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+	/**
+	 * Loads a presentation, either a demo or from an XML file, based on input arguments.
+	 *
+	 * @param presentation The presentation to load content into.
+	 * @param args Command-line arguments passed to the application.
+	 * @throws IOException If an error occurs during file loading.
+	 */
+
+	private static void loadPresentation(Presentation presentation, String[] args) throws IOException {
+		if (args.length == 0) {
+			// Load a demo presentation if no arguments are provided
+			new DemoPresentation().loadFile(presentation, null);
+		} else {
+			// Load a presentation from the specified XML file
+			new XMLAccessor().loadFile(presentation, args[0]);
 		}
 	}
 }

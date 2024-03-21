@@ -1,95 +1,92 @@
 package model;
 
+import observer.Observable;
+import observer.Observer;
+
 import java.util.ArrayList;
-
-
-/**
- * <p>Presentations keeps track of the slides in a presentation.</p>
- * <p>Only one instance of this class is available.</p>
- * @author Ian F. Darwin, ian@darwinsys.com, Gert Florijn, Sylvia Stuurman
- * @version 1.1 2002/12/17 Gert Florijn
- * @version 1.2 2003/11/19 Sylvia Stuurman
- * @version 1.3 2004/08/17 Sylvia Stuurman
- * @version 1.4 2007/07/16 Sylvia Stuurman
- * @version 1.5 2010/03/03 Sylvia Stuurman
- * @version 1.6 2014/05/16 Sylvia Stuurman
- */
-
+import java.util.List;
 
 /**
- * Manages the slides and the current state of the presentation.
+ * Represents a presentation, which is a collection of slides.
+ * This class is observable, meaning it notifies registered observers about changes to its state.
  */
 
-public class Presentation {
-	private String title;
-	private ArrayList<Slide> slides;
-	private int currentSlideIndex;
+public class Presentation implements Observable {
+	private List<Slide> slides;
+	private int currentSlideIndex = 0;
+
+	// The list of observers to be notified about changes in the presentation.
+	private List<Observer> observers = new ArrayList<>();
 
 	public Presentation() {
 		this.slides = new ArrayList<>();
-		this.currentSlideIndex = 0; // Start with the first slide
 	}
-
-	public String getTitle() {
-		return title;
+	public void append(Slide slide) {
+		slides.add(slide);
+		notifyObservers(); // Notify observers of the change if implementing Observable.
 	}
 
 	public void setTitle(String title) {
-		this.title = title;
+		// Set the title of the presentation and notify observers of change.
+		notifyObservers();
 	}
 
-	// Adds a slide to the presentation
 	public void addSlide(Slide slide) {
 		slides.add(slide);
+		notifyObservers();
 	}
 
-	// Returns the slide at the specified index
-	public Slide getSlide(int index) {
-		if (index >= 0 && index < slides.size()) {
-			return slides.get(index);
-		}
-		return null; // Return null if the index is out of boundss
+	public void removeSlide(Slide slide) {
+		slides.remove(slide);
+		notifyObservers();
 	}
 
-	// returns the number of slides in the presentation
-	public int getSize() {
-		return slides.size();
-	}
-
-	// Advances to the next slide, if possible
 	public void nextSlide() {
 		if (currentSlideIndex < slides.size() - 1) {
 			currentSlideIndex++;
+			notifyObservers();
 		}
 	}
 
-	// Moves back to the previous slide, if possible
 	public void prevSlide() {
 		if (currentSlideIndex > 0) {
 			currentSlideIndex--;
+			notifyObservers();
 		}
 	}
 
-	// Sets the current slide to the specified index
-	public void setSlideNumber(int number) {
-		if (number >= 0 && number < slides.size()) {
-			currentSlideIndex = number;
+	public Slide getCurrentSlide() {
+		if (slides.isEmpty()) {
+			return null; // Or a default slide.
 		}
+		return slides.get(currentSlideIndex);
 	}
 
-	// Returns the index of the current slide
-	public int getSlideNumber() {
+	public int getCurrentSlideNumber() {
 		return currentSlideIndex;
 	}
 
-	// Returns the current slide being viewed
-	public Slide getCurrentSlide() {
-		return getSlide(currentSlideIndex);
+	public void setSlideNumber(int slideNumber) {
+		if (slideNumber >= 0 && slideNumber < slides.size()) {
+			currentSlideIndex = slideNumber;
+			notifyObservers();
+		}
 	}
 
-	// Clears all slides from the presentation
-	public void clear() {
-		slides.clear();
-		currentSlideIndex = 0;
+	@Override
+	public void addObserver(Observer observer) {
+		observers.add(observer);
+	}
+
+	@Override
+	public void removeObserver(Observer observer) {
+		observers.remove(observer);
+	}
+
+	@Override
+	public void notifyObservers() {
+		for (Observer observer : observers) {
+			observer.update();
+		}
 	}
 }

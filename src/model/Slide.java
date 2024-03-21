@@ -1,9 +1,9 @@
 package model;
 
-import java.awt.Graphics;
-import java.awt.Rectangle;
+import java.awt.*;
 import java.awt.image.ImageObserver;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 /** <p>A slide. This class has drawing functionality.</p>
  * @author Ian F. Darwin, ian@darwinsys.com, Gert Florijn, Sylvia Stuurman
@@ -15,70 +15,54 @@ import java.util.Vector;
  * @version 1.6 2014/05/16 Sylvia Stuurman
  */
 
+/**
+ * Represents a single slide in the presentation, containing various slide items.
+ * This class is designed to fit within an MVC framework, where it forms part of the Model.
+ * It holds the data and logic for rendering a slide but delegates the actual rendering to the view.
+ */
+
 public class Slide {
-	public final static int WIDTH = 1200;
-	public final static int HEIGHT = 800;
-	protected String title; //The title is kept separately
-	protected Vector<SlideItem> items; //The SlideItems are kept in a vector
+	private String title;
+	private List<SlideItem> items;
 
 	public Slide() {
-		items = new Vector<SlideItem>();
+		this.items = new ArrayList<>();
 	}
 
-	//Add a model.SlideItem
-	public void append(SlideItem anItem) {
-		items.addElement(anItem);
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
-	//Return the title of a slide
 	public String getTitle() {
 		return title;
 	}
 
-	//Change the title of a slide
-	public void setTitle(String newTitle) {
-		title = newTitle;
+	public void addItem(SlideItem item) {
+		items.add(item);
 	}
 
-	//Create a model.TextItem out of a String and add the model.TextItem
-	public void append(int level, String message) {
-		append(new TextItem(level, message));
+	public void append(SlideItem item) {
+		this.items.add(item);
 	}
 
-	//Returns the model.SlideItem
-	public SlideItem getSlideItem(int number) {
-		return (SlideItem)items.elementAt(number);
+	public List<SlideItem> getItems() {
+		return new ArrayList<>(items);
 	}
 
-	//Return all the SlideItems in a vector
-	public Vector<SlideItem> getSlideItems() {
-		return items;
-	}
+	/**
+	 * Facilitates the rendering of the slide. This method organizes slide items
+	 * for rendering and is called by the view (SlideViewerComponent).
+	 *
+	 * @param g The Graphics context used for drawing.
+	 * @param area The area on the screen where the slide should be drawn.
+	 * @param observer The image observer to be notified of image updates.
+	 */
 
-	//Returns the size of a slide
-	public int getSize() {
-		return items.size();
-	}
-
-	//Draws the slide
-	public void draw(Graphics g, Rectangle area, ImageObserver view) {
-		float scale = getScale(area);
-	    int y = area.y;
-	//The title is treated separately
-	    SlideItem slideItem = new TextItem(0, getTitle());
-	    Style style = Style.getStyle(slideItem.getLevel());
-	    slideItem.draw(area.x, y, scale, g, style, view);
-	    y += slideItem.getBoundingBox(g, view, scale, style).height;
-	    for (int number=0; number<getSize(); number++) {
-	      slideItem = (SlideItem)getSlideItems().elementAt(number);
-	      style = Style.getStyle(slideItem.getLevel());
-	      slideItem.draw(area.x, y, scale, g, style, view);
-	      y += slideItem.getBoundingBox(g, view, scale, style).height;
-	    }
-	  }
-
-	//Returns the scale to draw a slide
-	private float getScale(Rectangle area) {
-		return Math.min(((float)area.width) / ((float)WIDTH), ((float)area.height) / ((float)HEIGHT));
+	public void draw(Graphics g, Rectangle area, ImageObserver observer) {
+		int y = area.y;
+		for (SlideItem item : items) {
+			item.draw(g, area.x, y, observer);
+			y += item.getHeight(g, observer);
+		}
 	}
 }
