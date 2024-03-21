@@ -15,90 +15,83 @@ import java.util.ArrayList;
  * @version 1.6 2014/05/16 Sylvia Stuurman
  */
 
+package model;
+
+import java.util.ArrayList;
+
+/**
+ * Manages the slides and the current state of the presentation.
+ */
 public class Presentation {
-	private String showTitle; //The title of the presentation
-	private ArrayList<Slide> showList = null; //An ArrayList with slides
-	private int currentSlideNumber = 0; //The number of the current slide
-	private SlideViewerComponent slideViewComponent = null; //The view component of the slides
+	private String title;
+	private ArrayList<Slide> slides;
+	private int currentSlideIndex;
 
 	public Presentation() {
-		slideViewComponent = null;
-		clear();
-	}
-
-	public Presentation(SlideViewerComponent slideViewerComponent) {
-		this.slideViewComponent = slideViewerComponent;
-		clear();
-	}
-
-	public int getSize() {
-		return showList.size();
+		this.slides = new ArrayList<>();
+		this.currentSlideIndex = 0; // Start with the first slide
 	}
 
 	public String getTitle() {
-		return showTitle;
+		return title;
 	}
 
-	public void setTitle(String nt) {
-		showTitle = nt;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
-	public void setShowView(SlideViewerComponent slideViewerComponent) {
-		this.slideViewComponent = slideViewerComponent;
+	// Adds a slide to the presentation
+	public void addSlide(Slide slide) {
+		slides.add(slide);
 	}
 
-	//Returns the number of the current slide
-	public int getSlideNumber() {
-		return currentSlideNumber;
-	}
-
-	//Change the current slide number and report it the the window
-	public void setSlideNumber(int number) {
-		currentSlideNumber = number;
-		if (slideViewComponent != null) {
-			slideViewComponent.update(this, getCurrentSlide());
+	// Returns the slide at the specified index
+	public Slide getSlide(int index) {
+		if (index >= 0 && index < slides.size()) {
+			return slides.get(index);
 		}
+		return null; // Return null if the index is out of bounds
 	}
 
-	//Navigate to the previous slide unless we are at the first slide
-	public void prevSlide() {
-		if (currentSlideNumber > 0) {
-			setSlideNumber(currentSlideNumber - 1);
-	    }
+	// Returns the number of slides in the presentation
+	public int getSize() {
+		return slides.size();
 	}
 
-	//Navigate to the next slide unless we are at the last slide
+	// Advances to the next slide, if possible
 	public void nextSlide() {
-		if (currentSlideNumber < (showList.size()-1)) {
-			setSlideNumber(currentSlideNumber + 1);
+		if (currentSlideIndex < slides.size() - 1) {
+			currentSlideIndex++;
 		}
 	}
 
-	//Remove the presentation
-	void clear() {
-		showList = new ArrayList<Slide>();
-		setSlideNumber(-1);
+	// Moves back to the previous slide, if possible
+	public void prevSlide() {
+		if (currentSlideIndex > 0) {
+			currentSlideIndex--;
+		}
 	}
 
-	//Add a slide to the presentation
-	public void append(Slide slide) {
-		showList.add(slide);
+	// Sets the current slide to the specified index
+	public void setSlideNumber(int number) {
+		if (number >= 0 && number < slides.size()) {
+			currentSlideIndex = number;
+		}
 	}
 
-	//Return a slide with a specific number
-	public Slide getSlide(int number) {
-		if (number < 0 || number >= getSize()){
-			return null;
-	    }
-			return (Slide)showList.get(number);
+	// Returns the index of the current slide
+	public int getSlideNumber() {
+		return currentSlideIndex;
 	}
 
-	//Return the current slide
+	// Returns the current slide being viewed
 	public Slide getCurrentSlide() {
-		return getSlide(currentSlideNumber);
+		return getSlide(currentSlideIndex);
 	}
 
-	public void exit(int n) {
-		System.exit(n);
+	// Clears all slides from the presentation
+	public void clear() {
+		slides.clear();
+		currentSlideIndex = 0;
 	}
 }
