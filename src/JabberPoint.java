@@ -1,3 +1,9 @@
+import model.Accessor;
+import model.Presentation;
+import model.Style;
+import model.XMLAccessor;
+import view.SlideViewerFrame;
+
 import javax.swing.JOptionPane;
 
 import java.io.IOException;
