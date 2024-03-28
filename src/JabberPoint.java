@@ -1,7 +1,3 @@
-import model.DemoPresentation;
-import model.Presentation;
-import model.Style;
-import model.XMLAccessor;
 import view.SlideViewerFrame;
 
 import javax.swing.JOptionPane;
