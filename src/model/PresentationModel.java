@@ -14,7 +14,7 @@ public class PresentationModel implements Observable {
 
     public PresentationModel() {
         slides = new ArrayList<>();
-        currentSlideIndex = -1; // Start with no slide selected
+        currentSlideIndex = -1;
     }
 
     public String getTitle() {
@@ -23,7 +23,6 @@ public class PresentationModel implements Observable {
 
     public void setTitle(String title) {
         this.title = title;
-        // Notify observers about the title change
         notifyObservers();
     }
 
@@ -37,11 +36,9 @@ public class PresentationModel implements Observable {
 
     public void setCurrentSlideIndex(int currentSlideIndex) {
         this.currentSlideIndex = currentSlideIndex;
-        // Notify observers about slide index change
         notifyObservers();
     }
 
-    // Observable interface methods
     @Override
     public void addObserver(Observer o) {
         if (!observers.contains(o)) {
@@ -61,36 +58,32 @@ public class PresentationModel implements Observable {
         }
     }
 
-    // The addSlide and removeSlide methods should notify observers after performing their actions.
     public void addSlide(SlideModel slide) {
         slides.add(slide);
-        notifyObservers(); // Notify after adding a slide.
+        notifyObservers();
     }
 
     public void removeSlide(int index) {
         if (index >= 0 && index < slides.size()) {
             slides.remove(index);
-            notifyObservers(); // Notify after removing a slide.
+            notifyObservers();
         }
     }
 
-    // The nextSlide method should notify observers after changing the slide index.
     public void nextSlide() {
         if (currentSlideIndex < slides.size() - 1) {
             setCurrentSlideIndex(currentSlideIndex + 1);
-            notifyObservers(); // Ensure observers are notified.
+            notifyObservers();
         }
     }
 
-    // The previousSlide method should also notify observers.
     public void previousSlide() {
         if (currentSlideIndex > 0) {
             setCurrentSlideIndex(currentSlideIndex - 1);
-            notifyObservers(); // Ensure observers are notified.
+            notifyObservers();
         }
     }
 
-    // Method to get the current slide
     public SlideModel getCurrentSlide() {
         if (currentSlideIndex >= 0 && currentSlideIndex < slides.size()) {
             return slides.get(currentSlideIndex);
@@ -98,10 +91,8 @@ public class PresentationModel implements Observable {
         return null;
     }
 
-    // Set the entire list of slides and notify observers
     public void setSlides(List<SlideModel> newSlides) {
         this.slides = newSlides;
-        setCurrentSlideIndex(0); // Optionally reset the slide index
-        notifyObservers(); // Notify observers of the change
+        notifyObservers();
     }
 }

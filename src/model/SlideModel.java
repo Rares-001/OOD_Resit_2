@@ -9,13 +9,12 @@ import java.util.List;
 public class SlideModel implements Observable {
     private String title;
     private List<SlideItemModel> items;
-    private List<Observer> observers = new ArrayList<>();
+    private List<Observer> observers;
 
-    // Constructor
     public SlideModel() {
         items = new ArrayList<>();
+        observers = new ArrayList<>();
     }
-
 
     public String getTitle() {
         return title;
@@ -23,7 +22,6 @@ public class SlideModel implements Observable {
 
     public void setTitle(String title) {
         this.title = title;
-        // Notify observers about the title change
         notifyObservers();
     }
 
@@ -31,37 +29,14 @@ public class SlideModel implements Observable {
         return items;
     }
 
-    // Observable interface methods
-    @Override
-    public void addObserver(Observer o) {
-        if (!observers.contains(o)) {
-            observers.add(o);
-        }
-    }
-
-    @Override
-    public void removeObserver(Observer o) {
-        observers.remove(o);
-    }
-
-    @Override
-    public void notifyObservers() {
-        for (Observer o : observers) {
-            o.update(this, null);
-        }
-    }
-
-    // Methods to manipulate slide items
     public void addItem(SlideItemModel item) {
         items.add(item);
-        // Notify observers about the item addition
         notifyObservers();
     }
 
     public void removeItem(int index) {
         if (index >= 0 && index < items.size()) {
             items.remove(index);
-            // Notify observers about the item removal
             notifyObservers();
         }
     }
@@ -72,4 +47,24 @@ public class SlideModel implements Observable {
         }
         return null;
     }
+
+    @Override
+    public void addObserver(Observer observer) {
+        if (observer != null && !observers.contains(observer)) {
+            observers.add(observer);
+        }
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers() {
+        for (Observer observer : observers) {
+            observer.update(this, null);
+        }
+    }
+
 }

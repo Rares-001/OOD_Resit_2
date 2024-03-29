@@ -4,57 +4,63 @@ import java.awt.Color;
 import java.awt.Font;
 
 public class Style {
-    private Font font;
-    private Color color;
-    private int leading;
+    private static Style[] styles;
+
+    private static final String FONT_NAME = "Helvetica";
     private int indent;
+    private Color color;
+    private Font font;
+    private int fontSize;
+    private int leading;
 
-    public Style(Font font, Color color, int leading, int indent) {
-        this.font = font;
-        this.color = color;
-        this.leading = leading;
+    public static void createStyles() {
+        styles = new Style[]{
+                new Style(0, Color.red, 48, 20),
+                new Style(20, Color.blue, 40, 10),
+                new Style(50, Color.black, 36, 10),
+                new Style(70, Color.black, 30, 10),
+                new Style(90, Color.black, 24, 10)
+        };
+    }
+
+    private Style(int indent, Color color, int fontSize, int leading) {
         this.indent = indent;
+        this.color = color;
+        this.fontSize = fontSize;
+        this.font = new Font(FONT_NAME, Font.BOLD, this.fontSize);
+        this.leading = leading;
     }
 
-    public Font getFont() {
-        return font;
+    public static Style getStyle(int level) {
+        if (level == 0) {
+            return styles[0]; // red title still not working
+        } else {
+            int index = level;
+            if (index > 0 && index < styles.length) {
+                return styles[index];
+            }
+            return styles[styles.length - 1];
+        }
     }
 
-    public void setFont(Font font) {
-        this.font = font;
+
+    public int getIndent() {
+        return indent;
     }
 
     public Color getColor() {
         return color;
     }
 
-    public void setColor(Color color) {
-        this.color = color;
+    public Font getFont(float scale) {
+        return font.deriveFont(fontSize * scale);
+    }
+
+    public int getFontSize() {
+        return fontSize;
     }
 
     public int getLeading() {
         return leading;
-    }
-
-    public void setLeading(int leading) {
-        this.leading = leading;
-    }
-
-    public int getIndent() {
-        return indent;
-    }
-
-    public void setIndent(int indent) {
-        this.indent = indent;
-    }
-
-    @Override
-    public String toString() {
-        return "Style{" +
-                "font=" + font +
-                ", color=" + color +
-                ", leading=" + leading +
-                ", indent=" + indent +
-                '}';
     }
 }

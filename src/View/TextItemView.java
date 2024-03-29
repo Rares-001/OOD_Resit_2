@@ -1,5 +1,6 @@
 package View;
 
+import model.Style;
 import model.TextItemModel;
 
 import java.awt.*;
@@ -9,30 +10,50 @@ import java.awt.font.TextAttribute;
 import java.awt.font.TextLayout;
 import java.text.AttributedString;
 
-public class TextItemView extends SlideItemView {
+public class TextItemView {
+    private TextItemModel model;
+
     public TextItemView(TextItemModel model) {
-        super(model);
+        this.model = model;
     }
 
-    @Override
-    public void draw(Graphics g, int x, int y) {
-        TextItemModel textModel = (TextItemModel) getModel();
-        AttributedString attrStr = new AttributedString(textModel.getText());
-        attrStr.addAttribute(TextAttribute.FONT, textModel.getStyle().getFont(), 0, textModel.getText().length());
+    public int draw(Graphics g, int x, int yInitial, float scale, int componentWidth) {
+        Style style = model.getStyle();
+
+        float wrappingWidth = componentWidth - (style.getIndent() * scale);
+
+        System.out.println("Drawing TextItem: \"" + model.getText() + "\" with Style: Color=" + style.getColor() + ", FontSize=" + style.getFontSize());
+
+        Font scaledFont = style.getFont(scale);
+
+        g.setColor(style.getColor());
+        g.setFont(scaledFont);
+
+        AttributedString attrStr = new AttributedString(model.getText());
+        attrStr.addAttribute(TextAttribute.FONT, scaledFont);
+        attrStr.addAttribute(TextAttribute.FOREGROUND, style.getColor());
 
         Graphics2D g2d = (Graphics2D) g;
-        g2d.setColor(textModel.getStyle().getColor());
         FontRenderContext frc = g2d.getFontRenderContext();
         LineBreakMeasurer measurer = new LineBreakMeasurer(attrStr.getIterator(), frc);
-        float wrappingWidth = (SlideView.WIDTH - textModel.getStyle().getIndent()) * 1.0f; // Assume scale is 1 for simplicity
 
-        while (measurer.getPosition() < textModel.getText().length()) {
+        int totalHeight = 0;
+        float y = yInitial;
+
+        while (measurer.getPosition() < model.getText().length()) {
             TextLayout layout = measurer.nextLayout(wrappingWidth);
+
             y += layout.getAscent();
-            layout.draw(g2d, x, y);
+
+            layout.draw(g2d, x + (style.getIndent() * scale), y);
+
+            int lineHeight = (int)(layout.getAscent() + layout.getDescent() + layout.getLeading());
+
             y += layout.getDescent() + layout.getLeading();
+
+            totalHeight += lineHeight;
         }
+
+        return totalHeight;
     }
-
-
 }

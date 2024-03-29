@@ -10,13 +10,11 @@ public class TextItemModel extends SlideItemModel {
         this.style = style;
     }
 
-
     public String getText() {
-        return text;
+        return getContent();
     }
 
     public void setText(String text) {
-        this.text = text;
         setContent(text);
     }
 

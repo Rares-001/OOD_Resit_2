@@ -26,10 +26,6 @@ public interface Observable {
      */
     void notifyObservers();
 }
-
-// Since Observable is an interface, we'll need a concrete class that implements it
-// to hold the common logic that can be used by other classes that are Observable.
-
 abstract class AbstractObservable implements Observable {
     private List<Observer> observers = new ArrayList<>();
 

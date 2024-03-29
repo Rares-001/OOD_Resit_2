@@ -7,13 +7,14 @@ import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.IOException;
 
-public class XMLDataAccess {
+public class XMLDataAccess implements DataAccessInterface {
 
     private static final String SHOW_TITLE = "showtitle";
     private static final String SLIDE_TITLE = "title";
@@ -24,8 +25,12 @@ public class XMLDataAccess {
     private static final String TEXT = "text";
     private static final String IMAGE = "image";
 
-    // Load a presentation from an XML file
-    public PresentationModel load(String filename) throws IOException {
+    public XMLDataAccess() {
+        Style.createStyles();
+    }
+
+    @Override
+    public PresentationModel loadPresentation(String filename) throws IOException {
         PresentationModel presentation = new PresentationModel();
         Document document = parseXMLFile(filename);
 
@@ -49,7 +54,6 @@ public class XMLDataAccess {
         return presentation;
     }
 
-    // Helper method to parse XML file
     private Document parseXMLFile(String filename) throws IOException {
         try {
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -59,7 +63,6 @@ public class XMLDataAccess {
         }
     }
 
-    // Helper method to get content of an XML element
     private String getElementContent(Element element, String tagName) {
         NodeList nodes = element.getElementsByTagName(tagName);
         if (nodes.getLength() == 0) {
@@ -68,14 +71,18 @@ public class XMLDataAccess {
         return nodes.item(0).getTextContent();
     }
 
-    // Helper method to create SlideItem from XML element
     private SlideItemModel createSlideItem(Element itemElement) {
         int itemLevel = Integer.parseInt(itemElement.getAttribute(LEVEL));
+        itemLevel = Math.max(itemLevel, 1);
+
         String itemType = itemElement.getAttribute(KIND);
         String itemContent = itemElement.getTextContent();
+        Style itemStyle = Style.getStyle(itemLevel);
+
+        System.out.println("Creating SlideItem: Level=" + itemLevel + ", Content=\"" + itemContent + "\"");
 
         if (TEXT.equals(itemType)) {
-            return new TextItemModel(itemLevel, itemContent);
+            return new TextItemModel(itemLevel, itemContent, itemStyle);
         } else if (IMAGE.equals(itemType)) {
             return new BitmapItemModel(itemLevel, itemContent);
         } else {
@@ -83,29 +90,24 @@ public class XMLDataAccess {
         }
     }
 
-    // Save a presentation to an XML file
-    public void save(PresentationModel presentation, String filename) throws IOException {
+    public void savePresentation(PresentationModel presentation, String filename) throws IOException {
         try {
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             Document document = builder.newDocument();
 
-            // Start building the XML structure
             Element presentationElement = document.createElement("presentation");
             document.appendChild(presentationElement);
 
-            // Add show title
             Element showTitleElement = document.createElement(SHOW_TITLE);
             showTitleElement.setTextContent(presentation.getTitle());
             presentationElement.appendChild(showTitleElement);
 
-            // Add slides
             for (SlideModel slide : presentation.getSlides()) {
                 Element slideElement = document.createElement(SLIDE);
                 Element titleElement = document.createElement(SLIDE_TITLE);
                 titleElement.setTextContent(slide.getTitle());
                 slideElement.appendChild(titleElement);
 
-                // Add items to slide
                 for (SlideItemModel item : slide.getItems()) {
                     Element itemElement = document.createElement(ITEM);
                     itemElement.setAttribute(LEVEL, String.valueOf(item.getLevel()));
@@ -123,11 +125,10 @@ public class XMLDataAccess {
                 presentationElement.appendChild(slideElement);
             }
 
-            // Write to file
             Transformer transformer = TransformerFactory.newInstance().newTransformer();
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             transformer.transform(new DOMSource(document), new StreamResult(new File(filename)));
-        } catch (TransformerException e) {
+        } catch (TransformerException | ParserConfigurationException e) {
             throw new IOException("Error saving XML file", e);
         }
     }

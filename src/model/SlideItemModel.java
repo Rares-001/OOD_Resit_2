@@ -9,7 +9,6 @@ public abstract class SlideItemModel {
         this.content = content;
     }
 
-    // Getters and setters
     public int getLevel() {
         return level;
     }

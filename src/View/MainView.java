@@ -2,6 +2,7 @@ package View;
 
 import controller.MainController;
 import model.PresentationModel;
+import model.SlideModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,11 +10,11 @@ import java.awt.*;
 public class MainView extends JFrame {
     private PresentationModel presentationModel;
     private MainController mainController;
-    private SlideView slideView; // Component for displaying the current slide
+    private SlideView slideView;
 
-    public MainView(PresentationModel presentationModel, MainController mainController) {
+    public MainView(PresentationModel presentationModel) {
         this.presentationModel = presentationModel;
-        this.mainController = mainController;
+        this.mainController = new MainController(presentationModel, this);
         initializeUI();
     }
 
@@ -37,37 +38,41 @@ public class MainView extends JFrame {
         controlPanel.add(nextButton);
         add(controlPanel, BorderLayout.SOUTH);
 
-        // Ensuring the view listens for changes in the presentation model to update the display
         presentationModel.addObserver((o, arg) -> updateView());
         pack();
-        setLocationRelativeTo(null); // Center the window
+        setLocationRelativeTo(null);
         setVisible(true);
     }
 
+    public void setController(MainController mainController) {
+        this.mainController = mainController;
+    }
+
     public void updateView() {
-        // Update slideView with the current slide from the presentation model
         slideView.setSlideModel(presentationModel.getCurrentSlide());
         slideView.repaint();
+        this.revalidate();
     }
 
-    // Method to update the entire presentation view
+
+    public void setPresentationModel(PresentationModel model) {
+        this.presentationModel = model;
+        updateView();
+    }
+
     public void updatePresentationView() {
-        // This could involve refreshing the slideView and other components if needed.
         slideView.setSlideModel(presentationModel.getCurrentSlide());
         slideView.repaint();
     }
 
-    // Method to display an error message
     public void displayErrorMessage(String message) {
         JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
-    // Method to display a confirmation or information message
     public void displayMessage(String message) {
         JOptionPane.showMessageDialog(this, message, "Information", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    // Method to update only the current slide view
     public void updateCurrentSlide() {
         slideView.setSlideModel(presentationModel.getCurrentSlide());
         slideView.repaint();
