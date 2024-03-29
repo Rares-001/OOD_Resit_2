@@ -1,5 +1,3 @@
-import view.SlideViewerFrame;
-
 import javax.swing.JOptionPane;
 import java.io.IOException;
 
@@ -28,41 +26,5 @@ public class JabberPoint {
 
 	public static void main(String[] args) {
 		// Initialize styles for the presentation
-		Style.createStyles();
-
-		// Create a new presentation
-		Presentation presentation = new Presentation();
-
-		// Initialize the main application window
-		SlideViewerFrame viewerFrame = new SlideViewerFrame(JABBERPOINT_VERSION, presentation);
-
-		try {
-			// Load a demo or XML presentation based on the command-line argument
-			loadPresentation(presentation, args);
-
-			// Set the initial slide number
-			presentation.setSlideNumber(0);
-		} catch (Exception e) {
-			// Show an error message dialog in case of failure
-			JOptionPane.showMessageDialog(viewerFrame, IO_ERROR_MESSAGE + e.getMessage(), JABBERPOINT_ERROR, JOptionPane.ERROR_MESSAGE);
-		}
-	}
-
-	/**
-	 * Loads a presentation, either a demo or from an XML file, based on input arguments.
-	 *
-	 * @param presentation The presentation to load content into.
-	 * @param args Command-line arguments passed to the application.
-	 * @throws IOException If an error occurs during file loading.
-	 */
-
-	private static void loadPresentation(Presentation presentation, String[] args) throws IOException {
-		if (args.length == 0) {
-			// Load a demo presentation if no arguments are provided
-			new DemoPresentation().loadFile(presentation, null);
-		} else {
-			// Load a presentation from the specified XML file
-			new XMLAccessor().loadFile(presentation, args[0]);
-		}
 	}
 }

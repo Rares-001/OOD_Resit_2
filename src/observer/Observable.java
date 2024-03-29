@@ -3,40 +3,52 @@ package observer;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Interface defining the methods required for an observable object in the observer pattern.
- */
-
 public interface Observable {
-    List<Observer> observers = new ArrayList<>();
+    /**
+     * Adds an observer to the set of observers for this object, provided
+     * that it is not the same as some observer already in the set.
+     *
+     * @param o an observer to be added.
+     */
+    void addObserver(Observer o);
 
     /**
-     * Registers an observer to be notified of changes.
+     * Deletes an observer from the set of observers of this object.
      *
-     * @param observer The observer to register.
+     * @param o the observer to be deleted.
      */
+    void removeObserver(Observer o);
 
-    default void addObserver(Observer observer) {
-        observers.add(observer);
+    /**
+     * If this object has changed, as indicated by the hasChanged method,
+     * then notify all of its observers and then call the clearChanged
+     * method to indicate that this object has no longer changed.
+     */
+    void notifyObservers();
+}
+
+// Since Observable is an interface, we'll need a concrete class that implements it
+// to hold the common logic that can be used by other classes that are Observable.
+
+abstract class AbstractObservable implements Observable {
+    private List<Observer> observers = new ArrayList<>();
+
+    @Override
+    public void addObserver(Observer o) {
+        if (!observers.contains(o)) {
+            observers.add(o);
+        }
     }
 
-    /**
-     * Removes a registered observer.
-     *
-     * @param observer The observer to remove.
-     */
-
-    default void removeObserver(Observer observer) {
-        observers.remove(observer);
+    @Override
+    public void removeObserver(Observer o) {
+        observers.remove(o);
     }
 
-    /**
-     * Notifies all registered observers of a change.
-     */
-
-    default void notifyObservers() {
+    @Override
+    public void notifyObservers() {
         for (Observer observer : observers) {
-            observer.update();
+            observer.update(this, null);
         }
     }
 }

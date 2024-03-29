@@ -1,16 +1,13 @@
 package observer;
 
-/**
- * Interface for an observer in the observer pattern. Classes that implement
- * Observer update their state in response to notifications from Observables.
- */
-
 public interface Observer {
-
     /**
-     * Called by the Observable object whenever there's a change. Implementations
-     * should update their state to reflect the change.
+     * This method is called whenever the observed object is changed. An
+     * application calls an Observable object's notifyObservers method to
+     * have all the object's observers notified of the change.
+     *
+     * @param o the observable object.
+     * @param arg an argument passed to the notifyObservers method.
      */
-
-    void update();
+    void update(Observable o, Object arg);
 }
