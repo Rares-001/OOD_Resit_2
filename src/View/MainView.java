@@ -6,6 +6,8 @@ import model.SlideModel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 
 public class MainView extends JFrame {
     private PresentationModel presentationModel;
@@ -16,6 +18,7 @@ public class MainView extends JFrame {
         this.presentationModel = presentationModel;
         this.mainController = new MainController(presentationModel, this);
         initializeUI();
+        setupKeyboardControls();
     }
 
     private void initializeUI() {
@@ -27,22 +30,84 @@ public class MainView extends JFrame {
         slideView = new SlideView(presentationModel.getCurrentSlide());
         add(slideView, BorderLayout.CENTER);
 
-        JPanel controlPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        JButton prevButton = new JButton("< Previous");
-        JButton nextButton = new JButton("Next >");
-
-        prevButton.addActionListener(e -> mainController.previousSlide());
-        nextButton.addActionListener(e -> mainController.nextSlide());
-
-        controlPanel.add(prevButton);
-        controlPanel.add(nextButton);
-        add(controlPanel, BorderLayout.SOUTH);
-
         presentationModel.addObserver((o, arg) -> updateView());
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
     }
+
+    private void setupKeyboardControls() {
+        bindKeyWithAction(KeyEvent.VK_PAGE_DOWN, 0, "nextSlide", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mainController.nextSlide();
+            }
+        });
+        bindKeyWithAction(KeyEvent.VK_DOWN, 0, "nextSlide", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mainController.nextSlide();
+            }
+        });
+        bindKeyWithAction(KeyEvent.VK_ENTER, 0, "nextSlide", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mainController.nextSlide();
+            }
+        });
+        bindKeyWithAction('+', 0, "nextSlide", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mainController.nextSlide();
+            }
+        });
+
+        bindKeyWithAction(KeyEvent.VK_PAGE_UP, 0, "previousSlide", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mainController.previousSlide();
+            }
+        });
+        bindKeyWithAction(KeyEvent.VK_UP, 0, "previousSlide", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mainController.previousSlide();
+            }
+        });
+        bindKeyWithAction('-', 0, "previousSlide", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mainController.previousSlide();
+            }
+        });
+
+        bindKeyWithAction('q', 0, "quit", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+        bindKeyWithAction('Q', 0, "quit", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+    }
+
+    private void bindKeyWithAction(int keyCode, int modifier, String actionMapKey, AbstractAction action) {
+        JComponent component = (JComponent) getContentPane();
+        component.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(keyCode, modifier), actionMapKey);
+        component.getActionMap().put(actionMapKey, action);
+    }
+
+    private void bindKeyWithAction(char character, int modifier, String actionMapKey, AbstractAction action) {
+        JComponent component = (JComponent) getContentPane();
+        component.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(character, modifier), actionMapKey);
+        component.getActionMap().put(actionMapKey, action);
+    }
+
+
 
     public void setController(MainController mainController) {
         this.mainController = mainController;
