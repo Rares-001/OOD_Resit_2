@@ -23,11 +23,7 @@ public class MenuController {
         this.dataAccess = dataAccess;
     }
 
-    public void handleOpen() {
-        handleOpenAction();
-    }
-
-    private void handleOpenAction() {
+    public void handleOpenAction(ActionEvent e) {
         JFileChooser fileChooser = new JFileChooser();
         int result = fileChooser.showOpenDialog(mainView);
         if (result == JFileChooser.APPROVE_OPTION) {
@@ -37,17 +33,13 @@ public class MenuController {
                 presentationModel.setTitle(newPresentation.getTitle());
                 presentationModel.setSlides(newPresentation.getSlides());
                 mainView.updatePresentationView();
-            } catch (IOException e) {
-                mainView.displayErrorMessage("Failed to open file: " + e.getMessage());
+            } catch (IOException ex) {
+                mainView.displayErrorMessage("Failed to open file: " + ex.getMessage());
             }
         }
     }
 
-    public void handleSave() {
-        handleSaveAction();
-    }
-
-    private void handleSaveAction() {
+    public void handleSaveAction(ActionEvent e) {
         JFileChooser fileChooser = new JFileChooser();
         int result = fileChooser.showSaveDialog(mainView);
         if (result == JFileChooser.APPROVE_OPTION) {
@@ -55,31 +47,27 @@ public class MenuController {
             try {
                 dataAccess.savePresentation(presentationModel, path);
                 mainView.displayMessage("Presentation saved successfully.");
-            } catch (IOException e) {
-                mainView.displayErrorMessage("Failed to save file: " + e.getMessage());
+            } catch (IOException ex) {
+                mainView.displayErrorMessage("Failed to save file: " + ex.getMessage());
             }
         }
     }
 
-    public void handleExit() {
-        handleExitAction();
-    }
-
-    private void handleExitAction() {
+    public void handleExitAction(ActionEvent e) {
         System.exit(0);
     }
 
-    public void handleNextSlideAction() {
+    public void handleNextSlideAction(ActionEvent e) {
         presentationModel.nextSlide();
         mainView.updateCurrentSlide();
     }
 
-    public void handlePreviousSlideAction() {
+    public void handlePreviousSlideAction(ActionEvent e) {
         presentationModel.previousSlide();
         mainView.updateCurrentSlide();
     }
 
-    private void handleGoToSlideAction() {
+    public void handleGoToSlideAction(ActionEvent e) {
         String slideNumberStr = JOptionPane.showInputDialog(mainView, "Enter slide number:");
         try {
             int slideNumber = Integer.parseInt(slideNumberStr);
@@ -89,12 +77,12 @@ public class MenuController {
             } else {
                 JOptionPane.showMessageDialog(mainView, "Slide number out of range.", "Error", JOptionPane.ERROR_MESSAGE);
             }
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException ex) { // Changed variable name to avoid conflict
             JOptionPane.showMessageDialog(mainView, "Invalid slide number.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    private void handleAboutAction() {
+    public void handleAboutAction(ActionEvent e) {
         JOptionPane.showMessageDialog(mainView, "About Information", "About", JOptionPane.INFORMATION_MESSAGE);
     }
 
