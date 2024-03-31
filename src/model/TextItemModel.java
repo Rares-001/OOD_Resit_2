@@ -4,25 +4,30 @@ public class TextItemModel extends SlideItemModel {
     private String text;
     private Style style;
 
-    public TextItemModel(int level, String text, Style style) {
+    public TextItemModel(int level, String text, Style style)
+    {
         super(level, text);
         this.text = text;
         this.style = style;
     }
 
-    public String getText() {
+    public String getText()
+    {
         return getContent();
     }
 
-    public void setText(String text) {
+    public void setText(String text)
+    {
         setContent(text);
     }
 
-    public Style getStyle() {
+    public Style getStyle()
+    {
         return style;
     }
 
-    public void setStyle(Style style) {
+    public void setStyle(Style style)
+    {
         this.style = style;
     }
 }

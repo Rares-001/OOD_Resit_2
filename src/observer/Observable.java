@@ -3,7 +3,8 @@ package observer;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface Observable {
+public interface Observable
+{
     /**
      * Adds an observer to the set of observers for this object, provided
      * that it is not the same as some observer already in the set.
@@ -26,24 +27,31 @@ public interface Observable {
      */
     void notifyObservers();
 }
-abstract class AbstractObservable implements Observable {
+
+abstract class AbstractObservable implements Observable
+{
     private List<Observer> observers = new ArrayList<>();
 
     @Override
-    public void addObserver(Observer o) {
-        if (!observers.contains(o)) {
+    public void addObserver(Observer o)
+    {
+        if (!observers.contains(o))
+        {
             observers.add(o);
         }
     }
 
     @Override
-    public void removeObserver(Observer o) {
+    public void removeObserver(Observer o)
+    {
         observers.remove(o);
     }
 
     @Override
-    public void notifyObservers() {
-        for (Observer observer : observers) {
+    public void notifyObservers()
+    {
+        for (Observer observer : observers)
+        {
             observer.update(this, null);
         }
     }

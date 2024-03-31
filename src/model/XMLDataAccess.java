@@ -14,7 +14,8 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.IOException;
 
-public class XMLDataAccess implements DataAccessInterface {
+public class XMLDataAccess implements DataAccessInterface
+{
 
     private static final String SHOW_TITLE = "showtitle";
     private static final String SLIDE_TITLE = "title";
@@ -25,12 +26,14 @@ public class XMLDataAccess implements DataAccessInterface {
     private static final String TEXT = "text";
     private static final String IMAGE = "image";
 
-    public XMLDataAccess() {
+    public XMLDataAccess()
+    {
         Style.createStyles();
     }
 
     @Override
-    public PresentationModel loadPresentation(String filename) throws IOException {
+    public PresentationModel loadPresentation(String filename) throws IOException
+    {
         PresentationModel presentation = new PresentationModel();
         Document document = parseXMLFile(filename);
 
@@ -44,34 +47,42 @@ public class XMLDataAccess implements DataAccessInterface {
             slide.setTitle(getElementContent(slideElement, SLIDE_TITLE));
 
             NodeList items = slideElement.getElementsByTagName(ITEM);
-            for (int j = 0; j < items.getLength(); j++) {
+            for (int j = 0; j < items.getLength(); j++)
+            {
                 Element itemElement = (Element) items.item(j);
                 slide.addItem(createSlideItem(itemElement));
             }
 
             presentation.addSlide(slide);
         }
+
         return presentation;
     }
 
-    private Document parseXMLFile(String filename) throws IOException {
+    private Document parseXMLFile(String filename) throws IOException
+    {
         try {
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             return builder.parse(new File(filename));
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             throw new IOException("Error parsing XML file", e);
         }
     }
 
-    private String getElementContent(Element element, String tagName) {
+    private String getElementContent(Element element, String tagName)
+    {
         NodeList nodes = element.getElementsByTagName(tagName);
-        if (nodes.getLength() == 0) {
+        if (nodes.getLength() == 0)
+        {
             return null;
         }
+
         return nodes.item(0).getTextContent();
     }
 
-    private SlideItemModel createSlideItem(Element itemElement) {
+    private SlideItemModel createSlideItem(Element itemElement)
+    {
         int itemLevel = Integer.parseInt(itemElement.getAttribute(LEVEL));
         itemLevel = Math.max(itemLevel, 1);
 
@@ -81,16 +92,19 @@ public class XMLDataAccess implements DataAccessInterface {
 
         System.out.println("Creating SlideItem: Level=" + itemLevel + ", Content=\"" + itemContent + "\"");
 
-        if (TEXT.equals(itemType)) {
+        if (TEXT.equals(itemType))
+        {
             return new TextItemModel(itemLevel, itemContent, itemStyle);
-        } else if (IMAGE.equals(itemType)) {
+        } else if (IMAGE.equals(itemType))
+        {
             return new BitmapItemModel(itemLevel, itemContent);
         } else {
             throw new IllegalArgumentException("Unknown slide item type: " + itemType);
         }
     }
 
-    public void savePresentation(PresentationModel presentation, String filename) throws IOException {
+    public void savePresentation(PresentationModel presentation, String filename) throws IOException
+    {
         try {
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             Document document = builder.newDocument();
@@ -102,33 +116,37 @@ public class XMLDataAccess implements DataAccessInterface {
             showTitleElement.setTextContent(presentation.getTitle());
             presentationElement.appendChild(showTitleElement);
 
-            for (SlideModel slide : presentation.getSlides()) {
+            for (SlideModel slide : presentation.getSlides())
+            {
                 Element slideElement = document.createElement(SLIDE);
                 Element titleElement = document.createElement(SLIDE_TITLE);
                 titleElement.setTextContent(slide.getTitle());
                 slideElement.appendChild(titleElement);
 
-                for (SlideItemModel item : slide.getItems()) {
+                for (SlideItemModel item : slide.getItems())
+                {
                     Element itemElement = document.createElement(ITEM);
                     itemElement.setAttribute(LEVEL, String.valueOf(item.getLevel()));
 
-                    if (item instanceof TextItemModel) {
+                    if (item instanceof TextItemModel)
+                    {
                         itemElement.setAttribute(KIND, TEXT);
                         itemElement.setTextContent(((TextItemModel) item).getText());
-                    } else if (item instanceof BitmapItemModel) {
+                    } else if (item instanceof BitmapItemModel)
+                    {
                         itemElement.setAttribute(KIND, IMAGE);
                         itemElement.setTextContent(((BitmapItemModel) item).getImagePath());
                     }
                     slideElement.appendChild(itemElement);
                 }
-
                 presentationElement.appendChild(slideElement);
             }
 
             Transformer transformer = TransformerFactory.newInstance().newTransformer();
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             transformer.transform(new DOMSource(document), new StreamResult(new File(filename)));
-        } catch (TransformerException | ParserConfigurationException e) {
+        } catch (TransformerException | ParserConfigurationException e)
+        {
             throw new IOException("Error saving XML file", e);
         }
     }

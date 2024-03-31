@@ -6,35 +6,42 @@ import observer.Observer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PresentationModel implements Observable {
+public class PresentationModel implements Observable
+{
     private String title;
     private List<SlideModel> slides;
     private int currentSlideIndex;
     private List<Observer> observers = new ArrayList<>();
 
-    public PresentationModel() {
+    public PresentationModel()
+    {
         slides = new ArrayList<>();
         currentSlideIndex = -1;
     }
 
-    public String getTitle() {
+    public String getTitle()
+    {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(String title)
+    {
         this.title = title;
         notifyObservers();
     }
 
-    public List<SlideModel> getSlides() {
+    public List<SlideModel> getSlides()
+    {
         return slides;
     }
 
-    public int getCurrentSlideIndex() {
+    public int getCurrentSlideIndex()
+    {
         return currentSlideIndex;
     }
 
-    public void setCurrentSlideIndex(int currentSlideIndex) {
+    public void setCurrentSlideIndex(int currentSlideIndex)
+    {
         this.currentSlideIndex = currentSlideIndex;
         notifyObservers();
     }
@@ -47,51 +54,56 @@ public class PresentationModel implements Observable {
     }
 
     @Override
-    public void removeObserver(Observer o) {
+    public void removeObserver(Observer o)
+    {
         observers.remove(o);
     }
 
     @Override
-    public void notifyObservers() {
-        for (Observer o : observers) {
+    public void notifyObservers()
+    {
+        for (Observer o : observers)
+        {
             o.update(this, null);
         }
     }
 
-    public void addSlide(SlideModel slide) {
+    public void addSlide(SlideModel slide)
+    {
         slides.add(slide);
         notifyObservers();
     }
 
-    public void removeSlide(int index) {
-        if (index >= 0 && index < slides.size()) {
-            slides.remove(index);
-            notifyObservers();
-        }
-    }
-
-    public void nextSlide() {
-        if (currentSlideIndex < slides.size() - 1) {
+    public void nextSlide()
+    {
+        if (currentSlideIndex < slides.size() - 1)
+        {
             setCurrentSlideIndex(currentSlideIndex + 1);
             notifyObservers();
         }
     }
 
-    public void previousSlide() {
-        if (currentSlideIndex > 0) {
+    public void previousSlide()
+    {
+        if (currentSlideIndex > 0)
+        {
             setCurrentSlideIndex(currentSlideIndex - 1);
             notifyObservers();
         }
     }
 
-    public SlideModel getCurrentSlide() {
-        if (currentSlideIndex >= 0 && currentSlideIndex < slides.size()) {
+    public SlideModel getCurrentSlide()
+    {
+        if (currentSlideIndex >= 0 && currentSlideIndex < slides.size())
+        {
             return slides.get(currentSlideIndex);
         }
+
         return null;
     }
 
-    public void setSlides(List<SlideModel> newSlides) {
+    public void setSlides(List<SlideModel> newSlides)
+    {
         this.slides = newSlides;
         notifyObservers();
     }

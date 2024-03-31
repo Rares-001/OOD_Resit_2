@@ -8,11 +8,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 
-public class MainController {
+public class MainController
+{
     private PresentationModel presentationModel;
     private MainView mainView;
 
-    public MainController(PresentationModel presentationModel, MainView mainView) {
+    public MainController(PresentationModel presentationModel, MainView mainView)
+    {
         this.presentationModel = presentationModel;
         this.mainView = mainView;
     }
@@ -40,8 +42,7 @@ public class MainController {
             PresentationModel newModel = dataAccess.loadPresentation(filePath);
             presentationModel.setTitle(newModel.getTitle());
             presentationModel.setSlides(newModel.getSlides());
-            presentationModel.setCurrentSlideIndex(0); // Start from the first slide
-            // Ensure observers are notified of changes
+            presentationModel.setCurrentSlideIndex(0);
             presentationModel.notifyObservers();
         } catch (IOException e) {
             displayErrorMessage("Error loading presentation from file: " + filePath);
@@ -54,16 +55,20 @@ public class MainController {
         System.err.println(message);
     }
 
-    public void loadDemoPresentationNoFound(PresentationModel presentationModel, String filePath) {
-        presentationModel.getSlides().clear(); // Clear existing slides
+    public void initializeWithDemoPresentation() {
+        loadDemoPresentationAsDefault();
+    }
+
+    public void loadDemoPresentationAsDefault() {
+        presentationModel.getSlides().clear();
         presentationModel.setTitle("Demo Presentation");
 
         Style.createStyles();
 
         SlideModel slide1 = new SlideModel();
         slide1.setTitle("JabberPoint");
-        slide1.addItem(new TextItemModel(1, "The Java presentation tool", Style.getStyle(0)));
-        slide1.addItem(new TextItemModel(2, "Copyright (c) 1996-2000: Ian Darwin", Style.getStyle(1)));
+        slide1.addItem(new TextItemModel(1, "The Java presentation tool", Style.getStyle(1)));
+        slide1.addItem(new TextItemModel(2, "Copyright (c) 1996-2000: Ian Darwin", Style.getStyle(2)));
         slide1.addItem(new TextItemModel(2, "Copyright (c) 2000-now:", Style.getStyle(2)));
         slide1.addItem(new TextItemModel(2, "Gert Florijn and Sylvia Stuurman", Style.getStyle(2)));
         slide1.addItem(new TextItemModel(4, "Calling Jabberpoint without a filename", Style.getStyle(4)));
@@ -80,7 +85,7 @@ public class MainController {
         slide2.addItem(new TextItemModel(2, "Level 2", Style.getStyle(2)));
         slide2.addItem(new TextItemModel(1, "Again level 1", Style.getStyle(1)));
         slide2.addItem(new TextItemModel(1, "Level 1 has style number 1", Style.getStyle(1)));
-        slide2.addItem(new TextItemModel(2, "Level 2 has style number 2", Style.getStyle(1)));
+        slide2.addItem(new TextItemModel(2, "Level 2 has style number 2", Style.getStyle(2)));
         slide2.addItem(new TextItemModel(3, "This is how level 3 looks like", Style.getStyle(3)));
         slide2.addItem(new TextItemModel(4, "And this is level 4", Style.getStyle(4)));
         presentationModel.addSlide(slide2);

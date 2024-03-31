@@ -9,7 +9,8 @@ import model.XMLDataAccess;
 
 public class JabberPoint {
 
-	public static void main(String[] args) {
+	public static void main(String[] args)
+	{
 		try {
 			// System properties for macOS menu bar integration
 			System.setProperty("apple.laf.useScreenMenuBar", "true");
@@ -19,20 +20,17 @@ public class JabberPoint {
 			PresentationModel presentationModel = new PresentationModel();
 			XMLDataAccess dataAccess = new XMLDataAccess();
 
-			MainView mainView = new MainView(presentationModel);
-			MenuController menuController = new MenuController(presentationModel, mainView, dataAccess);
-			MainController mainController = new MainController(presentationModel, mainView);
+			MenuController menuController = new MenuController(presentationModel, null, dataAccess);
+			MainView mainView = new MainView(presentationModel, menuController);
 
-			MenuView menuView = new MenuView(menuController);
-			mainView.setJMenuBar(menuView);
+			MainController mainController = new MainController(presentationModel, mainView);
 
 			mainView.setController(mainController);
 
-			mainController.loadPresentation("testPresentation.xml");
-
 			mainView.setVisible(true);
 
-		} catch (Exception ex) {
+		} catch (Exception ex)
+		{
 			JOptionPane.showMessageDialog(null, "IO Error: " + ex.getMessage(), "JabberPoint Error", JOptionPane.ERROR_MESSAGE);
 			System.exit(1);
 		}

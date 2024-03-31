@@ -8,16 +8,19 @@ import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
-public class MenuView extends JMenuBar {
+public class MenuView extends JMenuBar
+{
 
     private MenuController menuController;
 
-    public MenuView(MenuController menuController) {
+    public MenuView(MenuController menuController)
+    {
         this.menuController = menuController;
         createMenu();
     }
 
-    private void createMenu() {
+    private void createMenu()
+    {
         JMenu fileMenu = new JMenu("File");
         addMenuItem(fileMenu, "Open", e -> menuController.handleOpenAction(e));
         addMenuItem(fileMenu, "Save", e -> menuController.handleSaveAction(e));
@@ -35,7 +38,8 @@ public class MenuView extends JMenuBar {
         this.add(helpMenu);
     }
 
-    private void addMenuItem(JMenu menu, String title, ActionListener actionListener) {
+    private void addMenuItem(JMenu menu, String title, ActionListener actionListener)
+    {
         JMenuItem menuItem = new JMenuItem(title);
         menuItem.addActionListener(actionListener);
         menu.add(menuItem);

@@ -3,9 +3,9 @@ package model;
 import java.awt.Color;
 import java.awt.Font;
 
-public class Style {
+public class Style
+{
     private static Style[] styles;
-
     private static final String FONT_NAME = "Helvetica";
     private int indent;
     private Color color;
@@ -13,7 +13,14 @@ public class Style {
     private int fontSize;
     private int leading;
 
-    public static void createStyles() {
+    // New label-specific attributes
+    private static final String labelFontName = "Dialog";
+    private static final int labelFontStyle = Font.BOLD;
+    private static final int labelFontSize = 10;
+    private static final Color labelColor = Color.black;
+
+    public static void createStyles()
+    {
         styles = new Style[]{
                 new Style(0, Color.red, 48, 20),
                 new Style(20, Color.blue, 40, 10),
@@ -23,7 +30,8 @@ public class Style {
         };
     }
 
-    private Style(int indent, Color color, int fontSize, int leading) {
+    private Style(int indent, Color color, int fontSize, int leading)
+    {
         this.indent = indent;
         this.color = color;
         this.fontSize = fontSize;
@@ -31,36 +39,56 @@ public class Style {
         this.leading = leading;
     }
 
-    public static Style getStyle(int level) {
-        if (level == 0) {
-            return styles[0]; // red title still not working
-        } else {
+    public static Style getStyle(int level)
+    {
+        if (level == 0)
+        {
+            return styles[0];
+        } else
+        {
             int index = level;
-            if (index > 0 && index < styles.length) {
+            if (index > 0 && index < styles.length)
+            {
                 return styles[index];
             }
+
             return styles[styles.length - 1];
         }
     }
 
 
-    public int getIndent() {
+    public int getIndent()
+    {
         return indent;
     }
 
-    public Color getColor() {
+    public Color getColor()
+    {
         return color;
     }
 
-    public Font getFont(float scale) {
+    public Font getFont(float scale)
+    {
         return font.deriveFont(fontSize * scale);
     }
 
-    public int getFontSize() {
+    public static Font getLabelFont()
+    {
+        return new Font(labelFontName, labelFontStyle, labelFontSize);
+    }
+
+    public static Color getLabelColor()
+    {
+        return labelColor;
+    }
+
+    public int getFontSize()
+    {
         return fontSize;
     }
 
-    public int getLeading() {
+    public int getLeading()
+    {
         return leading;
     }
 }

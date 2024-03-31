@@ -10,14 +10,17 @@ import java.awt.font.TextAttribute;
 import java.awt.font.TextLayout;
 import java.text.AttributedString;
 
-public class TextItemView {
+public class TextItemView
+{
     private TextItemModel model;
 
-    public TextItemView(TextItemModel model) {
+    public TextItemView(TextItemModel model)
+    {
         this.model = model;
     }
 
-    public int draw(Graphics g, int x, int yInitial, float scale, int componentWidth) {
+    public int draw(Graphics g, int x, int yInitial, float scale, int componentWidth)
+    {
         Style style = model.getStyle();
 
         float wrappingWidth = componentWidth - (style.getIndent() * scale);
@@ -40,17 +43,13 @@ public class TextItemView {
         int totalHeight = 0;
         float y = yInitial;
 
-        while (measurer.getPosition() < model.getText().length()) {
+        while (measurer.getPosition() < model.getText().length())
+        {
             TextLayout layout = measurer.nextLayout(wrappingWidth);
-
             y += layout.getAscent();
-
             layout.draw(g2d, x + (style.getIndent() * scale), y);
-
             int lineHeight = (int)(layout.getAscent() + layout.getDescent() + layout.getLeading());
-
             y += layout.getDescent() + layout.getLeading();
-
             totalHeight += lineHeight;
         }
 

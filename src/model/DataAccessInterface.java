@@ -2,7 +2,8 @@ package model;
 
 import java.io.IOException;
 
-public interface DataAccessInterface {
+public interface DataAccessInterface
+{
     /**
      * Loads a presentation from a specified path.
      * In the case of the DemoPresentation, the path parameter may be ignored as it uses built-in demo data.

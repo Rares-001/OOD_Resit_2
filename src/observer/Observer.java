@@ -1,6 +1,7 @@
 package observer;
 
-public interface Observer {
+public interface Observer
+{
     /**
      * This method is called whenever the observed object is changed. An
      * application calls an Observable object's notifyObservers method to
