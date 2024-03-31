@@ -14,7 +14,7 @@ import java.awt.image.ImageObserver;
 public class SlideView extends JComponent implements Observer, ImageObserver
 {
     private SlideModel slideModel;
-    private PresentationModel presentationModel;
+    private final PresentationModel presentationModel;
 
     private static final Color BACKGROUND_COLOR = Color.white;
     public static final int WIDTH = 1200;
@@ -75,7 +75,7 @@ public class SlideView extends JComponent implements Observer, ImageObserver
         SlideModel currentSlide = presentationModel.getCurrentSlide();
         if (currentSlide == null) return;
 
-        int yPosition = 75; // Starting y-position for drawing
+        int yPosition = 75;
 
         Style titleStyle = Style.getStyle(0);
         g.setFont(titleStyle.getFont(scale));
@@ -99,45 +99,22 @@ public class SlideView extends JComponent implements Observer, ImageObserver
         }
     }
 
-
-
-
-
-
-
-
-
     private void drawCounter(Graphics g) {
         int currentSlideNumber = presentationModel.getCurrentSlideIndex() + 1;
         int totalSlides = presentationModel.getSlides().size();
         String counterText = "Slide " + currentSlideNumber + " of " + totalSlides;
-
-        // Use the label font from Style class
         Font counterFont = Style.getLabelFont();
         g.setFont(counterFont);
-        g.setColor(Color.black); // You can also make this color a part of your Style class if needed
-
-        // Calculate the width and height of the counter text
+        g.setColor(Color.black);
         FontMetrics metrics = g.getFontMetrics(counterFont);
         int textWidth = metrics.stringWidth(counterText);
         int textHeight = metrics.getHeight();
-
-        // Determine padding from the right edge and top
-        int paddingRight = 40; // Adjust this value based on your layout needs
-        int paddingTop = 10; // Adjust this value based on your layout needs
-
-        // Calculate x and y position dynamically based on the component size
-        // Positioning it from the right
+        int paddingRight = 40;
+        int paddingTop = 10;
         int x = getWidth() - textWidth - paddingRight;
-        // Positioning it from the top
         int y = paddingTop + textHeight;
-
-        // Draw the counter text at the calculated position
         g.drawString(counterText, x, y);
     }
-
-
-
 
     @Override
     public void update(Observable o, Object arg) {
@@ -150,6 +127,7 @@ public class SlideView extends JComponent implements Observer, ImageObserver
             repaint();
             return false;
         }
+
         return true;
     }
 }

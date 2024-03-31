@@ -17,7 +17,6 @@ public class Style
     private static final String labelFontName = "Dialog";
     private static final int labelFontStyle = Font.BOLD;
     private static final int labelFontSize = 10;
-    private static final Color labelColor = Color.black;
 
     public static void createStyles()
     {
@@ -46,16 +45,14 @@ public class Style
             return styles[0];
         } else
         {
-            int index = level;
-            if (index > 0 && index < styles.length)
+            if (level > 0 && level < styles.length)
             {
-                return styles[index];
+                return styles[level];
             }
 
             return styles[styles.length - 1];
         }
     }
-
 
     public int getIndent()
     {
@@ -75,11 +72,6 @@ public class Style
     public static Font getLabelFont()
     {
         return new Font(labelFontName, labelFontStyle, labelFontSize);
-    }
-
-    public static Color getLabelColor()
-    {
-        return labelColor;
     }
 
     public int getFontSize()

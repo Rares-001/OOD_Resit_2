@@ -9,9 +9,8 @@ import java.util.List;
 public class SlideModel implements Observable
 {
     private String title;
-    private List<SlideItemModel> items;
-    private List<Observer> observers;
-    private int currentSlideIndex = 0;
+    private final List<SlideItemModel> items;
+    private final List<Observer> observers;
 
     public SlideModel()
     {
@@ -19,7 +18,6 @@ public class SlideModel implements Observable
         observers = new ArrayList<>();
     }
 
-    // Getters and Setters
     public String getTitle()
     {
         return title;
@@ -42,31 +40,6 @@ public class SlideModel implements Observable
         notifyObservers();
     }
 
-    public void removeItem(int index)
-    {
-        if (index >= 0 && index < items.size())
-        {
-            items.remove(index);
-            notifyObservers();
-        }
-    }
-
-    public int getCurrentSlideIndex()
-    {
-        return currentSlideIndex;
-    }
-
-    public void setCurrentSlideIndex(int currentSlideIndex)
-    {
-        this.currentSlideIndex = currentSlideIndex;
-    }
-
-    public int getTotalSlides()
-    {
-        return items.size();
-    }
-
-    // Observer-related methods
     @Override
     public void addObserver(Observer observer)
     {
@@ -74,12 +47,6 @@ public class SlideModel implements Observable
         {
             observers.add(observer);
         }
-    }
-
-    @Override
-    public void removeObserver(Observer observer)
-    {
-        observers.remove(observer);
     }
 
     @Override

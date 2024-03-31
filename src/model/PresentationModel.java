@@ -54,12 +54,6 @@ public class PresentationModel implements Observable
     }
 
     @Override
-    public void removeObserver(Observer o)
-    {
-        observers.remove(o);
-    }
-
-    @Override
     public void notifyObservers()
     {
         for (Observer o : observers)

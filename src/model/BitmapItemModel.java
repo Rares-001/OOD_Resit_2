@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public class BitmapItemModel extends SlideItemModel
 {
-    private String imageName;
+    private final String imageName;
     private transient BufferedImage image;
     public BitmapItemModel(int level, String imageName)
     {
@@ -25,20 +25,6 @@ public class BitmapItemModel extends SlideItemModel
             System.err.println("File " + getContent() + " not found");
             image = null;
         }
-    }
-
-    public BufferedImage getImage()
-    {
-        if (image == null)
-        {
-            loadImage();
-        }
-        return image;
-    }
-
-    public String getImageName()
-    {
-        return imageName;
     }
 
     public void setContent(String imageName)

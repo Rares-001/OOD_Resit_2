@@ -1,17 +1,12 @@
 package controller;
 
 import View.MainView;
-import View.SlideView;
 import model.*;
-
-import javax.swing.*;
-import java.awt.*;
-import java.io.IOException;
 
 public class MainController
 {
-    private PresentationModel presentationModel;
-    private MainView mainView;
+    private final PresentationModel presentationModel;
+    private final MainView mainView;
 
     public MainController(PresentationModel presentationModel, MainView mainView)
     {
@@ -19,47 +14,34 @@ public class MainController
         this.mainView = mainView;
     }
 
-    public void startPresentation() {
+    public void startPresentation()
+    {
         presentationModel.setCurrentSlideIndex(0);
         mainView.updateView();
     }
 
-    public void nextSlide() {
-        if (presentationModel.getCurrentSlideIndex() < presentationModel.getSlides().size() - 1) {
+    public void nextSlide()
+    {
+        if (presentationModel.getCurrentSlideIndex() < presentationModel.getSlides().size() - 1)
+        {
             presentationModel.setCurrentSlideIndex(presentationModel.getCurrentSlideIndex() + 1);
         }
     }
 
-    public void previousSlide() {
-        if (presentationModel.getCurrentSlideIndex() > 0) {
+    public void previousSlide()
+    {
+        if (presentationModel.getCurrentSlideIndex() > 0)
+        {
             presentationModel.setCurrentSlideIndex(presentationModel.getCurrentSlideIndex() - 1);
         }
-    }
-
-    public void loadPresentation(String filePath) {
-        try {
-            DataAccessInterface dataAccess = new XMLDataAccess();
-            PresentationModel newModel = dataAccess.loadPresentation(filePath);
-            presentationModel.setTitle(newModel.getTitle());
-            presentationModel.setSlides(newModel.getSlides());
-            presentationModel.setCurrentSlideIndex(0);
-            presentationModel.notifyObservers();
-        } catch (IOException e) {
-            displayErrorMessage("Error loading presentation from file: " + filePath);
-            e.printStackTrace();
-        }
-    }
-
-    public void displayErrorMessage(String message) {
-        JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
-        System.err.println(message);
     }
 
     public void initializeWithDemoPresentation() {
         loadDemoPresentationAsDefault();
     }
 
-    public void loadDemoPresentationAsDefault() {
+    public void loadDemoPresentationAsDefault()
+    {
         presentationModel.getSlides().clear();
         presentationModel.setTitle("Demo Presentation");
 
@@ -98,7 +80,6 @@ public class MainController
         slide3.addItem(new TextItemModel(1, "This is the end of the presentation.", Style.getStyle(1)));
         slide3.addItem(new BitmapItemModel(1, "JabberPoint.jpg"));
         presentationModel.addSlide(slide3);
-
 
         startPresentation();
     }

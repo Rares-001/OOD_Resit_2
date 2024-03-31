@@ -12,6 +12,7 @@ public interface DataAccessInterface
      * @return the loaded PresentationModel object.
      * @throws IOException if there is an issue loading the file.
      */
+
     PresentationModel loadPresentation(String path) throws IOException;
 
     /**
@@ -22,5 +23,6 @@ public interface DataAccessInterface
      * @param path the file path to which to save the presentation.
      * @throws IOException if there is an issue saving the file.
      */
+
     void savePresentation(PresentationModel presentation, String path) throws IOException;
 }

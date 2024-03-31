@@ -3,7 +3,6 @@ package View;
 import controller.MainController;
 import controller.MenuController;
 import model.PresentationModel;
-import model.SlideModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +14,7 @@ public class MainView extends JFrame
     private PresentationModel presentationModel;
     private MainController mainController;
     private SlideView slideView;
-    private MenuController menuController;
+    private final MenuController menuController;
 
     public MainView(PresentationModel presentationModel, MenuController menuController)
     {
@@ -154,28 +153,6 @@ public class MainView extends JFrame
     {
         slideView.repaint();
         this.revalidate();
-    }
-
-
-    public void setPresentationModel(PresentationModel model)
-    {
-        this.presentationModel = model;
-        updateView();
-    }
-
-    public void updatePresentationView()
-    {
-        slideView.repaint();
-    }
-
-    public void displayErrorMessage(String message)
-    {
-        JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
-    }
-
-    public void displayMessage(String message)
-    {
-        JOptionPane.showMessageDialog(this, message, "Information", JOptionPane.INFORMATION_MESSAGE);
     }
 
     public void updateCurrentSlide()

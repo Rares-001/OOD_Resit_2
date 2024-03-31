@@ -3,6 +3,8 @@ package controller;
 import model.PresentationModel;
 import model.DataAccessInterface;
 
+import javax.swing.*;
+
 public class FileController
 {
     private final PresentationModel presentationModel;
@@ -16,8 +18,7 @@ public class FileController
 
     public void loadPresentation(String filePath)
     {
-        try
-        {
+        try {
             PresentationModel loadedPresentation = dataAccess.loadPresentation(filePath);
             presentationModel.setTitle(loadedPresentation.getTitle());
             presentationModel.setSlides(loadedPresentation.getSlides());
@@ -25,24 +26,24 @@ public class FileController
             presentationModel.notifyObservers();
         } catch (Exception e)
         {
-            e.printStackTrace();
+            handleLoadSaveException(e, "Failed to load presentation from file: " + filePath);
         }
     }
 
     public void savePresentation(String filePath)
     {
-        try
-        {
+        try {
             dataAccess.savePresentation(presentationModel, filePath);
-
         } catch (Exception e)
         {
-            e.printStackTrace();
+            handleLoadSaveException(e, "Failed to save presentation to file: " + filePath);
         }
     }
 
+    // abstracts the error handling logic for load and save operations
     private void handleLoadSaveException(Exception e, String message)
     {
         e.printStackTrace();
+        JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 }

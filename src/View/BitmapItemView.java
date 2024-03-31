@@ -1,9 +1,9 @@
 package View;
 
 import model.BitmapItemModel;
-import java.awt.Graphics;
-import java.awt.Image;
+
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class BitmapItemView
 {
-    private BitmapItemModel model;
+    private final BitmapItemModel model;
     private BufferedImage image;
 
     public BitmapItemView(BitmapItemModel model)

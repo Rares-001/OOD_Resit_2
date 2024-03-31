@@ -2,7 +2,7 @@ package model;
 
 public abstract class SlideItemModel
 {
-    private int level;
+    private final int level;
     private String content;
 
     public SlideItemModel(int level, String content)
@@ -14,11 +14,6 @@ public abstract class SlideItemModel
     public int getLevel()
     {
         return level;
-    }
-
-    public void setLevel(int level)
-    {
-        this.level = level;
     }
 
     public String getContent()

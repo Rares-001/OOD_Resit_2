@@ -1,87 +1,64 @@
 package controller;
 
 import View.AboutBoxView;
-import controller.MainController;
+import View.MainView;
 import model.PresentationModel;
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
-
-import model.PresentationModel;
-import model.DataAccessInterface;
-import View.MainView;
 
 public class MenuController
 {
-    private PresentationModel presentationModel;
-    private MainView mainView;
-    private DataAccessInterface dataAccess;
+    private final PresentationModel presentationModel;
+    private final MainView mainView;
+    private final FileController fileController;
 
-    public MenuController(PresentationModel presentationModel, MainView mainView, DataAccessInterface dataAccess)
+    public MenuController(PresentationModel presentationModel, MainView mainView, FileController fileController)
     {
         this.presentationModel = presentationModel;
         this.mainView = mainView;
-        this.dataAccess = dataAccess;
+        this.fileController = fileController;
     }
 
-    public void handleOpenAction(ActionEvent e)
+    public void handleOpenAction()
     {
         JFileChooser fileChooser = new JFileChooser();
         int result = fileChooser.showOpenDialog(mainView);
         if (result == JFileChooser.APPROVE_OPTION)
         {
             String path = fileChooser.getSelectedFile().getAbsolutePath();
-            try
-            {
-                PresentationModel newPresentation = dataAccess.loadPresentation(path);
-                presentationModel.setTitle(newPresentation.getTitle());
-                presentationModel.setSlides(newPresentation.getSlides());
-                mainView.updatePresentationView();
-            } catch (IOException ex)
-            {
-                mainView.displayErrorMessage("Failed to open file: " + ex.getMessage());
-            }
+            fileController.loadPresentation(path);
         }
     }
 
-    public void handleSaveAction(ActionEvent e)
+    public void handleSaveAction()
     {
         JFileChooser fileChooser = new JFileChooser();
         int result = fileChooser.showSaveDialog(mainView);
         if (result == JFileChooser.APPROVE_OPTION)
         {
             String path = fileChooser.getSelectedFile().getAbsolutePath();
-            try
-            {
-                dataAccess.savePresentation(presentationModel, path);
-                mainView.displayMessage("Presentation saved successfully.");
-            } catch (IOException ex)
-            {
-                mainView.displayErrorMessage("Failed to save file: " + ex.getMessage());
-            }
+            fileController.savePresentation(path);
         }
     }
 
-    public void handleExitAction(ActionEvent e)
+    public void handleExitAction()
     {
         System.exit(0);
     }
 
-    public void handleNextSlideAction(ActionEvent e)
+    public void handleNextSlideAction()
     {
         presentationModel.nextSlide();
         mainView.updateCurrentSlide();
     }
 
-    public void handlePreviousSlideAction(ActionEvent e)
+    public void handlePreviousSlideAction()
     {
         presentationModel.previousSlide();
         mainView.updateCurrentSlide();
     }
 
-    public void handleGoToSlideAction(ActionEvent e)
+    public void handleGoToSlideAction()
     {
         String slideNumberStr = JOptionPane.showInputDialog(mainView, "Enter slide number:");
         try
@@ -100,10 +77,9 @@ public class MenuController
         }
     }
 
-    public void handleAboutAction(ActionEvent e)
+    public void handleAboutAction()
     {
-        JFrame parentFrame = (mainView != null) ? (JFrame) mainView : (JFrame) SwingUtilities.getWindowAncestor(mainView);
-        AboutBoxView.showDialog(parentFrame);
+        AboutBoxView.showDialog(mainView);
     }
 
 }

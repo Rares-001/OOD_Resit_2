@@ -14,13 +14,6 @@ public interface Observable
     void addObserver(Observer o);
 
     /**
-     * Deletes an observer from the set of observers of this object.
-     *
-     * @param o the observer to be deleted.
-     */
-    void removeObserver(Observer o);
-
-    /**
      * If this object has changed, as indicated by the hasChanged method,
      * then notify all of its observers and then call the clearChanged
      * method to indicate that this object has no longer changed.
@@ -28,31 +21,3 @@ public interface Observable
     void notifyObservers();
 }
 
-abstract class AbstractObservable implements Observable
-{
-    private List<Observer> observers = new ArrayList<>();
-
-    @Override
-    public void addObserver(Observer o)
-    {
-        if (!observers.contains(o))
-        {
-            observers.add(o);
-        }
-    }
-
-    @Override
-    public void removeObserver(Observer o)
-    {
-        observers.remove(o);
-    }
-
-    @Override
-    public void notifyObservers()
-    {
-        for (Observer observer : observers)
-        {
-            observer.update(this, null);
-        }
-    }
-}
