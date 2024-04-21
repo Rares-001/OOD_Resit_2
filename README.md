@@ -1,1 +1,1 @@
-# OOD_Resit_2
+# This is the refactored version of Jabberpoint
