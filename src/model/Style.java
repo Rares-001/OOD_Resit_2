@@ -14,9 +14,9 @@ public class Style
     private int leading;
 
     // New label-specific attributes
-    private static final String labelFontName = "Dialog";
-    private static final int labelFontStyle = Font.BOLD;
-    private static final int labelFontSize = 10;
+    private static final String LABEL_FONT_NAME = "Dialog";
+    private static final int LABEL_FONT_STYLE = Font.BOLD;
+    private static final int LABEL_FONT_SIZE = 10;
 
     public static void createStyles()
     {
@@ -69,9 +69,8 @@ public class Style
         return font.deriveFont(fontSize * scale);
     }
 
-    public static Font getLabelFont()
-    {
-        return new Font(labelFontName, labelFontStyle, labelFontSize);
+    public static Font getLabelFont() {
+        return new Font(LABEL_FONT_NAME, LABEL_FONT_STYLE, LABEL_FONT_SIZE);
     }
 
     public int getFontSize()

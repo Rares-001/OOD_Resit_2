@@ -57,22 +57,23 @@ public class MenuController
         mainView.updateCurrentSlide();
     }
 
-    public void handleGoToSlideAction()
-    {
+    public void handleGoToSlideAction() {
         String slideNumberStr = JOptionPane.showInputDialog(mainView, "Enter slide number:");
-        try
-        {
-            int slideNumber = Integer.parseInt(slideNumberStr);
-            if (slideNumber >= 1 && slideNumber <= presentationModel.getSlides().size())
-            {
-                presentationModel.setCurrentSlideIndex(slideNumber - 1);
-                mainView.updateCurrentSlide();
-            } else
-            {
-                JOptionPane.showMessageDialog(mainView, "Slide number out of range.", "Error", JOptionPane.ERROR_MESSAGE);
+        if (slideNumberStr != null && !slideNumberStr.trim().isEmpty()) {
+            try {
+                int slideNumber = Integer.parseInt(slideNumberStr.trim());
+                if (slideNumber >= 1 && slideNumber <= presentationModel.getSlides().size()) {
+                    presentationModel.setCurrentSlideIndex(slideNumber - 1);
+                    mainView.updateCurrentSlide();
+                } else {
+                    JOptionPane.showMessageDialog(mainView, "Slide number out of range.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(mainView, "Invalid slide number.", "Error", JOptionPane.ERROR_MESSAGE);
             }
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(mainView, "Invalid slide number.", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            // Handle case where user cancels the input dialog or enters an empty string
+            JOptionPane.showMessageDialog(mainView, "No slide number entered.", "Error", JOptionPane.WARNING_MESSAGE);
         }
     }
 
@@ -80,5 +81,4 @@ public class MenuController
     {
         AboutBoxView.showDialog(mainView);
     }
-
 }

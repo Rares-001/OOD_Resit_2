@@ -25,7 +25,7 @@ public class MenuView extends JMenuBar
         addMenuItem(fileMenu, "Exit", e -> menuController.handleExitAction());
         this.add(fileMenu);
 
-        JMenu viewMenu = new JMenu("view");
+        JMenu viewMenu = new JMenu("View");
         addMenuItem(viewMenu, "Next", e -> menuController.handleNextSlideAction());
         addMenuItem(viewMenu, "Previous", e -> menuController.handlePreviousSlideAction());
         addMenuItem(viewMenu, "Go to Slide", e -> menuController.handleGoToSlideAction());

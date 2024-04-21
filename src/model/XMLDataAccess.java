@@ -61,13 +61,21 @@ public class XMLDataAccess implements DataAccessInterface
         return presentation;
     }
 
-    private Document parseXMLFile(String filename) throws IOException
-    {
+    //  to mitigate XML External Entity (XXE) vulnerabilities while allowing DOCTYPE declarations.
+    //  This balance is crucial for DTD validation.
+    private Document parseXMLFile(String filename) throws IOException {
         try {
-            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", false);
+            dbf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            dbf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            dbf.setXIncludeAware(false);
+            dbf.setExpandEntityReferences(false);
+
+            DocumentBuilder builder = dbf.newDocumentBuilder();
             return builder.parse(new File(filename));
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             throw new IOException("Error parsing XML file", e);
         }
     }

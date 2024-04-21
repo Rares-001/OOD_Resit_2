@@ -40,10 +40,11 @@ public class PresentationModel implements Observable
         return currentSlideIndex;
     }
 
-    public void setCurrentSlideIndex(int currentSlideIndex)
-    {
-        this.currentSlideIndex = currentSlideIndex;
-        notifyObservers();
+    public void setCurrentSlideIndex(int currentSlideIndex) {
+        if (this.currentSlideIndex != currentSlideIndex) {
+            this.currentSlideIndex = currentSlideIndex;
+            notifyObservers();
+        }
     }
 
     @Override
@@ -73,7 +74,6 @@ public class PresentationModel implements Observable
         if (currentSlideIndex < slides.size() - 1)
         {
             setCurrentSlideIndex(currentSlideIndex + 1);
-            notifyObservers();
         }
     }
 
@@ -82,7 +82,6 @@ public class PresentationModel implements Observable
         if (currentSlideIndex > 0)
         {
             setCurrentSlideIndex(currentSlideIndex - 1);
-            notifyObservers();
         }
     }
 
@@ -96,9 +95,10 @@ public class PresentationModel implements Observable
         return null;
     }
 
-    public void setSlides(List<SlideModel> newSlides)
-    {
-        this.slides = newSlides;
-        notifyObservers();
+    public void setSlides(List<SlideModel> newSlides) {
+        if (!this.slides.equals(newSlides)) {
+            this.slides = newSlides;
+            notifyObservers();
+        }
     }
 }

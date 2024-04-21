@@ -13,7 +13,6 @@ import java.awt.image.ImageObserver;
 
 public class SlideView extends JComponent implements Observer, ImageObserver
 {
-    private SlideModel slideModel;
     private final PresentationModel presentationModel;
 
     private static final Color BACKGROUND_COLOR = Color.white;

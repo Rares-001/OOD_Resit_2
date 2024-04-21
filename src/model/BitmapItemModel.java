@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public class BitmapItemModel extends SlideItemModel
 {
-    private final String imageName;
+    private String imageName;
     private transient BufferedImage image;
     public BitmapItemModel(int level, String imageName)
     {
@@ -16,20 +16,24 @@ public class BitmapItemModel extends SlideItemModel
         loadImage();
     }
 
-    private void loadImage()
-    {
-        try {
-            image = ImageIO.read(new File(getContent()));
-        } catch (IOException e)
-        {
-            System.err.println("File " + getContent() + " not found");
+    private void loadImage() {
+        File imageFile = new File(imageName);
+        if (imageFile.exists()) {
+            try {
+                image = ImageIO.read(imageFile);
+            } catch (IOException e) {
+                System.err.println("Error loading image from " + imageName + ": " + e.getMessage());
+                image = null;
+            }
+        } else {
+            System.err.println("Image file not found: " + imageName);
             image = null;
         }
     }
 
-    public void setContent(String imageName)
-    {
+    public void setContent(String imageName) {
         super.setContent(imageName);
+        this.imageName = imageName;
         loadImage();
     }
 
