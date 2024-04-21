@@ -1,10 +1,8 @@
-package View;
+package view;
 
 import model.SlideItemModel;
-import model.TextItemModel;
-import java.awt.FontMetrics;
+
 import java.awt.Graphics;
-import java.awt.Rectangle;
 
 public abstract class SlideItemView {
     protected SlideItemModel model;

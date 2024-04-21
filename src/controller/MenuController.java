@@ -1,10 +1,9 @@
 package controller;
 
-import View.AboutBoxView;
-import View.MainView;
+import view.AboutBoxView;
+import view.MainView;
 import model.PresentationModel;
 import javax.swing.*;
-import java.awt.event.ActionEvent;
 
 public class MenuController
 {
@@ -72,7 +71,7 @@ public class MenuController
             {
                 JOptionPane.showMessageDialog(mainView, "Slide number out of range.", "Error", JOptionPane.ERROR_MESSAGE);
             }
-        } catch (NumberFormatException ex) { // Changed variable name to avoid conflict
+        } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(mainView, "Invalid slide number.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }

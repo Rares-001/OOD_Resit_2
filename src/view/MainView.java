@@ -1,4 +1,4 @@
-package View;
+package view;
 
 import controller.MainController;
 import controller.MenuController;
@@ -47,7 +47,7 @@ public class MainView extends JFrame
     private void setupMenu()
     {
         MenuView menuView = new MenuView(menuController);
-        this.setJMenuBar(menuView); // Set the menu bar
+        this.setJMenuBar(menuView);
     }
 
     private void setupKeyboardControls()

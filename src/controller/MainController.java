@@ -1,6 +1,6 @@
 package controller;
 
-import View.MainView;
+import view.MainView;
 import model.*;
 
 public class MainController

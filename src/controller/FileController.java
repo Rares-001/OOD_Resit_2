@@ -4,6 +4,8 @@ import model.PresentationModel;
 import model.DataAccessInterface;
 
 import javax.swing.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class FileController
 {
@@ -16,27 +18,35 @@ public class FileController
         this.dataAccess = dataAccess;
     }
 
-    public void loadPresentation(String filePath)
-    {
+    public void loadPresentation(String filePath) {
         try {
             PresentationModel loadedPresentation = dataAccess.loadPresentation(filePath);
-            presentationModel.setTitle(loadedPresentation.getTitle());
-            presentationModel.setSlides(loadedPresentation.getSlides());
-            presentationModel.setCurrentSlideIndex(0);
-            presentationModel.notifyObservers();
-        } catch (Exception e)
-        {
-            handleLoadSaveException(e, "Failed to load presentation from file: " + filePath);
+            updatePresentationModel(loadedPresentation);
+        } catch (FileNotFoundException fnfe) {
+            handleLoadSaveException(fnfe, "Presentation file not found: " + filePath);
+        } catch (IOException ioe) {
+            handleLoadSaveException(ioe, "Error reading from file: " + filePath);
+        } catch (Exception e) {
+            handleLoadSaveException(e, "Unexpected error loading presentation from file: " + filePath);
         }
     }
 
-    public void savePresentation(String filePath)
-    {
+    private void updatePresentationModel(PresentationModel loadedPresentation) {
+        presentationModel.setTitle(loadedPresentation.getTitle());
+        presentationModel.setSlides(loadedPresentation.getSlides());
+        presentationModel.setCurrentSlideIndex(0);
+        presentationModel.notifyObservers();
+    }
+
+    public void savePresentation(String filePath) {
         try {
             dataAccess.savePresentation(presentationModel, filePath);
-        } catch (Exception e)
-        {
-            handleLoadSaveException(e, "Failed to save presentation to file: " + filePath);
+        } catch (FileNotFoundException fnfe) {
+            handleLoadSaveException(fnfe, "Cannot save to file. File not found: " + filePath);
+        } catch (IOException ioe) {
+            handleLoadSaveException(ioe, "Error writing to file: " + filePath);
+        } catch (Exception e) {
+            handleLoadSaveException(e, "Unexpected error saving presentation to file: " + filePath);
         }
     }
 

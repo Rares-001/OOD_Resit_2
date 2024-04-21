@@ -1,6 +1,6 @@
 import javax.swing.JOptionPane;
-import View.MainView;
-import View.MenuView;
+import view.MainView;
+import view.MenuView;
 import controller.FileController;
 import controller.MainController;
 import controller.MenuController;
